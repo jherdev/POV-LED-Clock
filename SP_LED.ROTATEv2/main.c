@@ -38,13 +38,8 @@ void SendColor(int color);
 void delay_ms(uint32_t ui32Ms);
 void delay_us(uint32_t ui32Us);
 
-
-
 enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b};
 uint8_t button_poll(void);
-
-
-
 
 uint8_t brightness_toggle = 0;
 
