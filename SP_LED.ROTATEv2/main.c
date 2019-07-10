@@ -45,26 +45,40 @@ uint8_t brightness_toggle = 0;
 
 int main(void)
 {
+    // System Clock Configuration
     SysCtlClockSet(SYSCTL_SYSDIV_2_5|SYSCTL_USE_PLL|SYSCTL_XTAL_16MHZ|SYSCTL_OSC_MAIN); // 80 MHz
 
+    // I/O Pin Enable
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);    // Enable GPIO Pin Set A: UART, I2C, 7-Segment
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);    // Enable GPIO Pin Set B: Buttons, 7-Segment
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);    // Enable GPIO Pin Set C: Buttons
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);    // Enable GPIO Pin Set D: LED Data Output, 7-Segment
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);    // Enable GPIO Pin Set E: 7-Segment
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);    // Enable GPIO Pin Set F: 7-Segment
+
     // UART0 Setup
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);    // Enable GPIO Pin Set A0 - A7
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);    // Enable UART Module 0
     GPIOPinConfigure(GPIO_PA1_U0TX);                // only transmitter - one way communication
     GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_1);   // Configure pin A0 as UART Pin
     UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 9600, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
     // GPIO LED Setup
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
     GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_0); // initialize PD0 as GPIO
 
     // GPIO Button Setup
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
     GPIOPinTypeGPIOInput(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
-    // setup rising edge level interrupt on pin C4 - maybe
+        // setup rising edge level interrupt on pin C4 - maybe
     GPIOPinTypeGPIOInput(GPIO_PORTD_BASE, GPIO_PIN_6);
     GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_3);
+
+    // GPIO 7-Segment Setup
+    GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4);
+    GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE, GPIO_PIN_2 | GPIO_PIN_6 | GPIO_PIN_7);
+    GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_2 | GPIO_PIN_3);
+    GPIOPinTypeGPIOOutput(GPIO_PORTE_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2);
+    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_0);
+        // PE2, PE1, PD3, PD2 - Digit Selection
+        // PA2, PA3, PA4, PB6, PB7, PF0, PE0, PB2 - Segment Selection
 
     // I2C1 Setup - PA6 & PA7
     SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C1);         // Enable I2C module 1
@@ -86,13 +100,13 @@ int main(void)
     enum month{JANUARY = 1 , FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER = 0x10, NOVEMBER = 0x11, DECEMBER = 0x12};
 
     I2CSend(SLAVE_ADDR, 2,  RTCSEC,     0x00);
-    I2CSend(SLAVE_ADDR, 2,  RTCMIN,     0x30);
-    I2CSend(SLAVE_ADDR, 2,  RTCHOUR,    0x06);
-    I2CSend(SLAVE_ADDR, 2,  RTCWKDAY,   MONDAY);
-    I2CSend(SLAVE_ADDR, 2,  RTCDATE,    0x17);
-    I2CSend(SLAVE_ADDR, 2,  RTCMONTH,   JUNE);
+    I2CSend(SLAVE_ADDR, 2,  RTCMIN,     0x50);
+    I2CSend(SLAVE_ADDR, 2,  RTCHOUR,    0x04);
+    I2CSend(SLAVE_ADDR, 2,  RTCWKDAY,   WEDNESDAY);
+    I2CSend(SLAVE_ADDR, 2,  RTCDATE,    0x10);
+    I2CSend(SLAVE_ADDR, 2,  RTCMONTH,   JULY);
     I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
-    // Default RTCC Date set to Monday, June 17, 2019 - 6:30 (A/P)M
+    // Default RTCC Date set to Wednesday, July 10, 2019 - 4:50 (A/P)M
 
     // check and clear OSF bit (0x0F control register, bit 7)
     // check and clear EN32kHz (0x0F control register, bit 3)
