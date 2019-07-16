@@ -38,7 +38,7 @@ void SendColor(int color);
 void delay_ms(uint32_t ui32Ms);
 void delay_us(uint32_t ui32Us);
 
-enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b};
+enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b, color_b};
 uint8_t button_poll(void);
 
 uint8_t brightness_toggle = 0;
@@ -70,6 +70,7 @@ int main(void)
         // setup rising edge level interrupt on pin C4 - maybe
     GPIOPinTypeGPIOInput(GPIO_PORTD_BASE, GPIO_PIN_6);
     GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_3);
+    GPIOPinTypeGPIOInput(GPIO_PORTF_BASE, GPIO_PIN_3);
 
     // GPIO 7-Segment Setup
     GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4);
@@ -99,14 +100,14 @@ int main(void)
     enum day{SUNDAY = 1, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
     enum month{JANUARY = 1 , FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER = 0x10, NOVEMBER = 0x11, DECEMBER = 0x12};
 
-    I2CSend(SLAVE_ADDR, 2,  RTCSEC,     0x00);
-    I2CSend(SLAVE_ADDR, 2,  RTCMIN,     0x50);
-    I2CSend(SLAVE_ADDR, 2,  RTCHOUR,    0x04);
-    I2CSend(SLAVE_ADDR, 2,  RTCWKDAY,   WEDNESDAY);
-    I2CSend(SLAVE_ADDR, 2,  RTCDATE,    0x10);
-    I2CSend(SLAVE_ADDR, 2,  RTCMONTH,   JULY);
-    I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
-    // Default RTCC Date set to Wednesday, July 10, 2019 - 4:50 (A/P)M
+    //    I2CSend(SLAVE_ADDR, 2,  RTCSEC,     0x00);
+    //    I2CSend(SLAVE_ADDR, 2,  RTCMIN,     0x50);
+    //    I2CSend(SLAVE_ADDR, 2,  RTCHOUR,    0x04);
+    //    I2CSend(SLAVE_ADDR, 2,  RTCWKDAY,   WEDNESDAY);
+    //    I2CSend(SLAVE_ADDR, 2,  RTCDATE,    0x10);
+    //    I2CSend(SLAVE_ADDR, 2,  RTCMONTH,   JULY);
+    //    I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
+    // Initialized RTCC Date set to Wednesday, July 10, 2019 - 4:50 (A/P)M
 
     // check and clear OSF bit (0x0F control register, bit 7)
     // check and clear EN32kHz (0x0F control register, bit 3)
@@ -129,8 +130,9 @@ int main(void)
     uint8_t second = 0;
 
     uint8_t display_toggle = 0;
+    uint32_t color_toggle = RED_HEX;
 
-    enum state{INIT, TOGGLE, HOUR, MINUTE, CLOCK, BRIGHT};
+    enum state{INIT, TOGGLE, HOUR, MINUTE, CLOCK, BRIGHT, COLOR};
     uint8_t configure_state = INIT;
 
     while(1)
@@ -159,6 +161,9 @@ int main(void)
                                 break;
                             case brightness_b:
                                 configure_state = BRIGHT;
+                                break;
+                            case color_b:
+                                configure_state = COLOR;
                                 break;
                             default:
                                 sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
@@ -192,6 +197,9 @@ int main(void)
                                 break;
                             case brightness_b:
                                 configure_state = BRIGHT;
+                                break;
+                            case color_b:
+                                configure_state = COLOR;
                                 break;
                             default:
                                 sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
@@ -235,6 +243,10 @@ int main(void)
                                 break;
                             case brightness_b:
                                 configure_state = BRIGHT;
+                                UARTCharPut(UART0_BASE, '\n');
+                                break;
+                            case color_b:
+                                configure_state = COLOR;
                                 UARTCharPut(UART0_BASE, '\n');
                                 break;
                             default:
@@ -282,6 +294,10 @@ int main(void)
                                 configure_state = BRIGHT;
                                 UARTCharPut(UART0_BASE, '\n');
                                 break;
+                            case color_b:
+                                configure_state = COLOR;
+                                UARTCharPut(UART0_BASE, '\n');
+                                break;
                             default:
                                 sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
                                 break;
@@ -312,6 +328,10 @@ int main(void)
                                 break;
                             case brightness_b:
                                 configure_state = BRIGHT;
+                                UARTCharPut(UART0_BASE, '\n');
+                                break;
+                            case color_b:
+                                configure_state = COLOR;
                                 UARTCharPut(UART0_BASE, '\n');
                                 break;
                             default:
@@ -361,8 +381,12 @@ int main(void)
                                 }
                                 UART_OutString2(brightness_toggle);         // Display current brightness toggle mode
                                 for(i = 0; i < 20; i++){
-                                    SendColor(RED_HEX);
+                                    //SendColor(RED_HEX);
+                                    SendColor(color_toggle);
                                 }
+                                break;
+                            case color_b:
+                                configure_state = COLOR;
                                 break;
                             default:
                                 sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
@@ -372,6 +396,55 @@ int main(void)
                     }while((configure_state == BRIGHT) && (sw != 0));
 
                     break;
+                case COLOR:
+                    do{
+                        switch(button_poll()){
+                            case toggle_b:
+                                configure_state = TOGGLE;
+                                break;
+                            case hour_b:
+                                configure_state = HOUR;
+                                break;
+                            case minute_b:
+                                configure_state = MINUTE;
+                                break;
+                            case clock_b:
+                                configure_state = CLOCK;
+                                break;
+                            case brightness_b:
+                                configure_state = BRIGHT;
+                                break;
+                            case color_b:
+                                switch(color_toggle){
+                                    case RED_HEX:
+                                        color_toggle = BLUE_HEX;
+                                        break;
+                                    case BLUE_HEX:
+                                        color_toggle = GREEN_HEX;
+                                        break;
+                                    case GREEN_HEX:
+                                        color_toggle = PURPLE_HEX;
+                                        break;
+                                    case PURPLE_HEX:
+                                        color_toggle = RED_HEX;
+                                        break;
+                                    default:
+                                        color_toggle = RED_HEX;
+                                        break;
+                                }
+
+                                for(i = 0; i < 20; i++){
+                                    SendColor(color_toggle);
+                                }
+
+                                break;
+                            default:
+                                sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);      // default - check switch
+                                break;
+                        }
+                    }while((configure_state == COLOR) && (sw != 0));
+                    break;
+
             }
         }
 
@@ -416,6 +489,7 @@ uint8_t button_poll(){
     uint32_t minute_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_7);
     uint32_t clock_input = GPIOPinRead(GPIO_PORTD_BASE, GPIO_PIN_6);
     uint32_t brightness_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_3);
+    uint32_t color_input = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
 
     if(toggle_input != 0){
         return 1;
@@ -427,6 +501,8 @@ uint8_t button_poll(){
         return 4;
     }else if(brightness_input != 0){
         return 5;
+    }else if(color_input != 0){
+        return 6;
     }else{
         return 0;
     }
