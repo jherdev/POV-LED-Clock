@@ -75,11 +75,10 @@ int main(void)
     // GPIO 7-Segment Setup
     GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4);
     GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE, GPIO_PIN_2 | GPIO_PIN_6 | GPIO_PIN_7);
-    GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_2 | GPIO_PIN_3);
-    GPIOPinTypeGPIOOutput(GPIO_PORTE_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2);
-    GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_0);
-        // PE2, PE1, PD3, PD2 - Digit Selection
-        // PA2, PA3, PA4, PB6, PB7, PF0, PE0, PB2 - Segment Selection
+    GPIOPinTypeGPIOOutput(GPIO_PORTD_BASE, GPIO_PIN_3 | GPIO_PIN_7);
+    GPIOPinTypeGPIOOutput(GPIO_PORTE_BASE, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+        // PE3, PE2, PE1, PD3 - Digit Selection
+        // PA2, PA3, PA4, PB6, PB7, PD7, PE0, PB2 - Segment Selection
 
     // I2C1 Setup - PA6 & PA7
     SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C1);         // Enable I2C module 1
@@ -451,34 +450,68 @@ int main(void)
             UART_OutString(9);
             configure_state = INIT;         // reset configuration state to INIT for next configuration
 
-            for(i = 0; i < 20; i++){
-                SendColor(RED_HEX);
-            }
-//            for(i = 0; i < 10; i++){
-//                SendColor(BLUE_HEX);
-//            }
-            delay_ms(1000);
+            while(1){
+            // Digit 1
+                 GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_3, 8);
 
-            for(i = 0; i < 20; i++){
-                SendColor(RED1_HEX);
-            }
-//            for(i = 0; i < 10; i++){
-//                SendColor(WHITE_HEX);
-//            }
-            delay_ms(1000);
+                //sseg_decoder
+                GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);
+                GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_3, 8);
 
-            for(i = 0; i < 20; i++){
-                SendColor(RED2_HEX);
-            }
-//            for(i = 0; i < 10; i++){
-//                SendColor(YELLOW_HEX);
-//            }
-            delay_ms(1000);
+                delay_ms(5);
 
-            for(i = 0; i < 20; i++){
-                SendColor(RED3_HEX);
+                //clear_digit()
+                GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_3, 0);
+
+                GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 0);
+                GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_3, 0);
+
+
+            // Digit 2
+                GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, 4);
+
+                //sseg_decoder
+                GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_4, 16);
+                GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_6, 64);
+
+                delay_ms(5);
+
+                //clear_digit();
+                GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, 0);
+
+                GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_4, 0);
+                GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_6, 0);
+
+            // Digit 3
+                GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_1, 2);
+
+                //sseg_decoder
+                GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_7, 128);
+                GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_7, 128);
+
+                delay_ms(5);
+
+                //clear_digit();
+                GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_1, 0);
+
+                GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_7, 0);
+                GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_7, 0);
+
+            // Digit 4
+                GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_3, 8);
+
+                //sseg_decoder
+                GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_0, 1);
+                GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_2, 4);
+
+                delay_ms(5);
+
+                //clear_digit();
+                GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_3, 0);
+
+                GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_0, 0);
+                GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_2, 0);
             }
-            delay_ms(1000);
     }
 }
 
