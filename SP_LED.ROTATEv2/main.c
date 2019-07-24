@@ -143,7 +143,8 @@ int main(void)
 
     while(1)
     {
-        sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);
+        //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);
+        sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
 
         while(sw != 0){
             switch(configure_state){
@@ -172,7 +173,8 @@ int main(void)
                                 configure_state = COLOR;
                                 break;
                             default:
-                                sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
                                 break;
                         }
                         delay_ms(300);
@@ -208,7 +210,8 @@ int main(void)
                                 configure_state = COLOR;
                                 break;
                             default:
-                                sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
                                 break;
                         }
                         delay_ms(300);
@@ -256,7 +259,8 @@ int main(void)
                                 UARTCharPut(UART0_BASE, '\n');
                                 break;
                             default:
-                                sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);      // default - check switch
+                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);      // default - check switch
+                                sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
                                 break;
                         }
                         I2CSend(SLAVE_ADDR, 2, RTCHOUR, dec_to_bcd(hour));          // store hour value
@@ -305,7 +309,8 @@ int main(void)
                                 UARTCharPut(UART0_BASE, '\n');
                                 break;
                             default:
-                                sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
                                 break;
                         }
                         I2CSend(SLAVE_ADDR, 2, RTCMIN, dec_to_bcd(minute));          // store hour value
@@ -356,7 +361,8 @@ int main(void)
 
                                 UARTCharPut(UART0_BASE, '\r');
 
-                                sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
                                 break;
                         }
                         delay_ms(400);
@@ -395,7 +401,8 @@ int main(void)
                                 configure_state = COLOR;
                                 break;
                             default:
-                                sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
+                                sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
                                 break;
                         }
                         delay_ms(300);
@@ -445,7 +452,8 @@ int main(void)
 
                                 break;
                             default:
-                                sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);      // default - check switch
+                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);      // default - check switch
+                                sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
                                 break;
                         }
                     }while((configure_state == COLOR) && (sw != 0));
@@ -457,7 +465,7 @@ int main(void)
             UART_OutString(9);
             configure_state = INIT;         // reset configuration state to INIT for next configuration
 
-            while(1){
+            //while(1){
             // Digit 1
                 sseg_digit_select(1);
                 sseg_decoder(8);
@@ -490,7 +498,7 @@ int main(void)
 
                 sseg_clear();
                 sseg_digit_clear();
-            }
+            //}
     }
 }
 
@@ -612,12 +620,23 @@ void sseg_clear(void){
 
 uint8_t button_poll(){
 
-    uint32_t toggle_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_5);
-    uint32_t hour_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_6);
-    uint32_t minute_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_7);
-    uint32_t clock_input = GPIOPinRead(GPIO_PORTD_BASE, GPIO_PIN_6);
-    uint32_t brightness_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_3);
-    uint32_t color_input = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
+    //uint32_t toggle_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_5);
+    uint32_t toggle_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_3);
+
+    //uint32_t hour_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_6);
+    uint32_t hour_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);
+
+    //uint32_t minute_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_7);
+    uint32_t minute_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_5);
+
+    //uint32_t clock_input = GPIOPinRead(GPIO_PORTD_BASE, GPIO_PIN_6);
+    uint32_t clock_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_6);
+
+    //uint32_t brightness_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_3);
+    uint32_t brightness_input = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_7);
+
+    //uint32_t color_input = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
+    uint32_t color_input = GPIOPinRead(GPIO_PORTD_BASE, GPIO_PIN_6);
 
     if(toggle_input != 0){
         return 1;
