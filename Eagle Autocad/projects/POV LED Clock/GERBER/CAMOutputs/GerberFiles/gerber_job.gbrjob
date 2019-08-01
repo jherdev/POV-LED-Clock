@@ -1,0 +1,24 @@
+{
+    "Header": {
+        "Comment": "All values are metric (mm)",
+        "CreationDate": "2019-08-01T07:41:03Z",
+        "GenerationSoftware": {
+            "Application": "EAGLE",
+            "Vendor": "Autodesk",
+            "Version": "9.4.2"
+        },
+        "Part": "Single"
+    },
+    "Overall": {
+        "BoardThickness": 1.57,
+        "LayerNumber": 2,
+        "Name": {
+            "ProjectId": "Rotating Section"
+        },
+        "Owner": "Jorge Hernandez <jorge.hernandez@oit.edu>",
+        "Size": {
+            "X": 159.746,
+            "Y": 100
+        }
+    }
+}
