@@ -41,12 +41,11 @@ void delay_us(uint32_t ui32Us);
 enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b, color_b};
 uint8_t button_poll(void);
 
-
 void sseg_decoder(uint8_t value);
 void sseg_clear(void);
 void sseg_digit_select(uint8_t value);
 void sseg_digit_clear(void);
-
+void sseg_message(uint8_t dig1, uint8_t dig2, uint8_t dig3, uint8_t dig4);
 
 uint8_t brightness_toggle = 0;
 
@@ -107,14 +106,14 @@ int main(void)
     enum day{SUNDAY = 1, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
     enum month{JANUARY = 1 , FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER = 0x10, NOVEMBER = 0x11, DECEMBER = 0x12};
 
-    //    I2CSend(SLAVE_ADDR, 2,  RTCSEC,     0x00);
-    //    I2CSend(SLAVE_ADDR, 2,  RTCMIN,     0x50);
-    //    I2CSend(SLAVE_ADDR, 2,  RTCHOUR,    0x04);
-    //    I2CSend(SLAVE_ADDR, 2,  RTCWKDAY,   WEDNESDAY);
-    //    I2CSend(SLAVE_ADDR, 2,  RTCDATE,    0x10);
-    //    I2CSend(SLAVE_ADDR, 2,  RTCMONTH,   JULY);
-    //    I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
-    // Initialized RTCC Date set to Wednesday, July 10, 2019 - 4:50 (A/P)M
+        I2CSend(SLAVE_ADDR, 2,  RTCSEC,     0x00);
+        I2CSend(SLAVE_ADDR, 2,  RTCMIN,     0x50);
+        I2CSend(SLAVE_ADDR, 2,  RTCHOUR,    0x04);
+        I2CSend(SLAVE_ADDR, 2,  RTCWKDAY,   WEDNESDAY);
+        I2CSend(SLAVE_ADDR, 2,  RTCDATE,    0x10);
+        I2CSend(SLAVE_ADDR, 2,  RTCMONTH,   JULY);
+        I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
+     //sInitialized RTCC Date set to Wednesday, July 10, 2019 - 4:50 (A/P)M
 
     // check and clear OSF bit (0x0F control register, bit 7)
     // check and clear EN32kHz (0x0F control register, bit 3)
@@ -139,21 +138,19 @@ int main(void)
     uint8_t display_toggle = 0;
     uint32_t color_toggle = RED_HEX;
 
+    //uint32_t count = 0;
+
     enum state{INIT, TOGGLE, HOUR, MINUTE, CLOCK, BRIGHT, COLOR};
     uint8_t configure_state = INIT;
 
     while(1)
     {
-        //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);
         sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-        //sw = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_2);
-
         while(sw != 0){
             switch(configure_state){
                 case INIT:
                     UART_OutString(3);      // Display Entered Clock Configuration State
                     UART_OutString(4);      // Display Press Button to Modify Parameter
-
                     do{
                         switch(button_poll()){
                             case toggle_b:
@@ -175,27 +172,32 @@ int main(void)
                                 configure_state = COLOR;
                                 break;
                             default:
-                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-                                //sw = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_2);
+                                sseg_message(99, 99, 99, 99);
                                 break;
                         }
-                        delay_ms(300);
+                        //delay_ms(300);
                     }while((configure_state == INIT) && (sw != 0));
-
                     break;
                 case TOGGLE:
                     UART_OutString(display_toggle);                     // Display current display toggle mode
-                    delay_ms(300);
+                    //}
+                    //delay_ms(300);
                     do{
                         switch(button_poll()){
                             case toggle_b:
-                                if(display_toggle == 2){
-                                    display_toggle = 0;
-                                }else{
-                                    display_toggle++;
-                                }
-                                UART_OutString(display_toggle);         // Display current display toggle mode
+
+                                //if(count == 3){
+                                    if(display_toggle == 2){
+                                        display_toggle = 0;
+                                    }else{
+                                        display_toggle++;
+                                    }
+                                    UART_OutString(display_toggle);         // Display current display toggle mode
+                                  //  count = 0;
+                                //}
+                                //++count;
+
                                 break;
                             case hour_b:
                                 configure_state = HOUR;
@@ -213,12 +215,26 @@ int main(void)
                                 configure_state = COLOR;
                                 break;
                             default:
-                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-                                //sw = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_2);
+
+                                switch(display_toggle){
+                                    case 0:
+                                        sseg_message(99, 1, 2, 20);
+                                        break;
+                                    case 1:
+                                        sseg_message(99, 2, 4, 20);
+                                        break;
+                                    case 2:
+                                        sseg_message(99, 20, 22, 99);
+                                        break;
+                                    default:
+                                        sseg_message(99, 99, 99, 99);
+                                        break;
+                                }
+
                                 break;
                         }
-                        delay_ms(300);
+                        //delay_ms(300);
                     }while((configure_state == TOGGLE) && (sw != 0));
 
                     break;
@@ -263,13 +279,12 @@ int main(void)
                                 UARTCharPut(UART0_BASE, '\n');
                                 break;
                             default:
-                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);      // default - check switch
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-                                //sw = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_2);
+                                sseg_message(99,99, hour/10, hour % 10);
                                 break;
                         }
                         I2CSend(SLAVE_ADDR, 2, RTCHOUR, dec_to_bcd(hour));          // store hour value
-                        delay_ms(300);
+                        //delay_ms(300);
                     }while((configure_state == HOUR) && (sw != 0));
                     break;
                 case MINUTE:
@@ -314,18 +329,15 @@ int main(void)
                                 UARTCharPut(UART0_BASE, '\n');
                                 break;
                             default:
-                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-                                //sw = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_2);
+                                sseg_message(99, 99, minute / 10, minute % 10);
                                 break;
                         }
                         I2CSend(SLAVE_ADDR, 2, RTCMIN, dec_to_bcd(minute));          // store hour value
-                        delay_ms(300);
+                        //delay_ms(300);
                     }while((configure_state == MINUTE) && (sw != 0));
-
                     break;
                 case CLOCK:
-
                     do{
                         switch(button_poll()){
                             case toggle_b:
@@ -367,12 +379,11 @@ int main(void)
 
                                 UARTCharPut(UART0_BASE, '\r');
 
-                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-                                //sw = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_2);
+                                sseg_message(hour / 10, (hour % 10) + 10, minute / 10, minute % 10);
                                 break;
                         }
-                        delay_ms(400);
+                        //delay_ms(400);
                     }while((configure_state == CLOCK) && (sw != 0));
 
                     break;
@@ -408,12 +419,29 @@ int main(void)
                                 configure_state = COLOR;
                                 break;
                             default:
-                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);       // default - check switch
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-                                //sw = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_2);
+
+                                switch(brightness_toggle){
+                                    case 0:
+                                        sseg_message(99, 1, 0, 0);
+                                        break;
+                                    case 1:
+                                        sseg_message(99, 99, 7, 5);
+                                        break;
+                                    case 2:
+                                        sseg_message(99, 99, 5, 0);
+                                        break;
+                                    case 3:
+                                        sseg_message(99, 99, 2, 5);
+                                        break;
+                                    default:
+                                        sseg_message(99, 99, 99, 99);
+                                        break;
+                                }
+
                                 break;
                         }
-                        delay_ms(300);
+                        //delay_ms(300);
                     }while((configure_state == BRIGHT) && (sw != 0));
 
                     break;
@@ -474,41 +502,35 @@ int main(void)
             UART_OutString(9);
             configure_state = INIT;         // reset configuration state to INIT for next configuration
 
-            //while(1){
-            // Digit 1
-                sseg_digit_select(1);
-                sseg_decoder(8);
+            sseg_message(12,13,15,16);
 
-                delay_ms(3);
-
-                sseg_clear();
-                sseg_digit_clear();
-            // Digit 2
-                sseg_digit_select(2);
-                sseg_decoder(9);
-
-                delay_ms(3);
-
-                sseg_clear();
-                sseg_digit_clear();
-            // Digit 3
-                sseg_digit_select(3);
-                sseg_decoder(10);
-
-                delay_ms(3);
-
-                sseg_clear();
-                sseg_digit_clear();
-            // Digit 4
-                sseg_digit_select(4);
-                sseg_decoder(7);
-
-                delay_ms(3);
-
-                sseg_clear();
-                sseg_digit_clear();
-            //}
     }
+}
+
+void sseg_message(uint8_t dig1, uint8_t dig2, uint8_t dig3, uint8_t dig4){
+    sseg_digit_select(1);
+    sseg_decoder(dig1);
+    delay_ms(2);
+    sseg_clear();
+    sseg_digit_clear();
+
+    sseg_digit_select(2);
+    sseg_decoder(dig2);
+    delay_ms(2);
+    sseg_clear();
+    sseg_digit_clear();
+
+    sseg_digit_select(3);
+    sseg_decoder(dig3);
+    delay_ms(2);
+    sseg_clear();
+    sseg_digit_clear();
+
+    sseg_digit_select(4);
+    sseg_decoder(dig4);
+    delay_ms(2);
+    sseg_clear();
+    sseg_digit_clear();
 }
 
 void sseg_digit_select(uint8_t value){
@@ -536,15 +558,6 @@ void sseg_digit_clear(void){
     GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_3, 0);   // digit 3
     GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_1, 0);   // digit 4
 }
-
-//GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
-//GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
-//GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
-//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
-//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
-//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
-//GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
-//GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
 
 void sseg_decoder(uint8_t value){
     switch(value){
@@ -616,6 +629,112 @@ void sseg_decoder(uint8_t value){
             GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
             GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
             break;
+        case 10:   // 0. or 0:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 11:    // 1. or 1:
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 12:    // 2. or 2:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 13:    // 3. or 3:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 14:    // 4. or 4:
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 15:    // 5. or 5:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 16:    // 6. or 6:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 17:    // 7. or 7:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 18:    // 8. or 8:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 19:    // 9. or 9:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 20:    // H
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            break;
+        case 21:    // H. or H:
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_5, 32);      // B
+            GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, 8);       // C
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
+        case 22:    // C
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            break;
+        case 23:    // C. or C:
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_6, 64);      // A
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_5, 32);      // D
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_6, 64);      // E
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_7, 128);     // F
+            GPIOPinWrite(GPIO_PORTC_BASE, GPIO_PIN_4, 16);      // DP
+            break;
         default:
             GPIOPinWrite(GPIO_PORTA_BASE, GPIO_PIN_2, 4);       // G
             break;
@@ -644,16 +763,22 @@ uint8_t button_poll(){
     uint32_t color_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_3);
 
     if(toggle_input != 0){
+        delay_ms(250);
         return 1;
     }else if(hour_input != 0){
+        delay_ms(250);
         return 2;
     }else if(minute_input != 0){
+        delay_ms(250);
         return 3;
     }else if(clock_input != 0){
+        delay_ms(250);
         return 4;
     }else if(brightness_input != 0){
+        delay_ms(250);
         return 5;
     }else if(color_input != 0){
+        delay_ms(250);
         return 6;
     }else{
         return 0;
