@@ -25,6 +25,9 @@ main.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h
 main.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/i2c.h
 main.obj: ../color.h
 main.obj: ../uart_out.h
+main.obj: ../setup.h
+main.obj: ../rtcc.h
+main.obj: ../sseg.h
 
 ../main.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/include/stdio.h: 
@@ -51,3 +54,6 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/pin_map.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/i2c.h: 
 ../color.h: 
 ../uart_out.h: 
+../setup.h: 
+../rtcc.h: 
+../sseg.h: 
