@@ -12,7 +12,5 @@
 
 extern void     I2CSend(uint8_t slave_addr, uint8_t num_of_args, ...);
 extern uint32_t I2CReceive(uint8_t slave_addr, uint8_t reg);
-extern uint8_t  dec_to_bcd(uint32_t value);
-extern uint8_t  bcd_to_dec(uint32_t value);
 
 #endif /* RTCC_H_ */

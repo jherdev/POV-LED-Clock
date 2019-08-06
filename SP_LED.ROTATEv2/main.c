@@ -18,16 +18,13 @@
 #include "setup.h"
 #include "rtcc.h"
 #include "sseg.h"
+#include "misc.h"
 
-uint32_t adjust_brightness(uint32_t color);
-void SendColor(int color);
-void delay_ms(uint32_t ui32Ms);
-void delay_us(uint32_t ui32Us);
+uint32_t adjust_brightness(uint32_t color, uint8_t brightness);
+void send_color(uint32_t color);
 
 enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b, color_b};
 uint8_t button_poll(void);
-
-uint8_t brightness_toggle = 0;
 
 int main(void)
 {
@@ -48,7 +45,9 @@ int main(void)
     uint8_t second = 0;
 
     uint8_t display_toggle = 0;
+    uint8_t brightness_toggle = 0;
     uint32_t color_toggle = RED_HEX;
+    uint32_t led_value = 0;
 
     //uint32_t count = 0;
 
@@ -88,28 +87,19 @@ int main(void)
                                 sseg_message(99, 99, 99, 99);
                                 break;
                         }
-                        //delay_ms(300);
                     }while((configure_state == INIT) && (sw != 0));
                     break;
                 case TOGGLE:
                     UART_OutString(display_toggle);                     // Display current display toggle mode
-                    //}
-                    //delay_ms(300);
                     do{
                         switch(button_poll()){
                             case toggle_b:
-
-                                //if(count == 3){
-                                    if(display_toggle == 2){
-                                        display_toggle = 0;
-                                    }else{
-                                        display_toggle++;
-                                    }
-                                    UART_OutString(display_toggle);         // Display current display toggle mode
-                                  //  count = 0;
-                                //}
-                                //++count;
-
+                                if(display_toggle == 2){
+                                    display_toggle = 0;
+                                }else{
+                                    display_toggle++;
+                                }
+                                UART_OutString(display_toggle);         // Display current display toggle mode
                                 break;
                             case hour_b:
                                 configure_state = HOUR;
@@ -128,7 +118,6 @@ int main(void)
                                 break;
                             default:
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-
                                 switch(display_toggle){
                                     case 0:
                                         sseg_message(99, 1, 2, 20);
@@ -143,12 +132,9 @@ int main(void)
                                         sseg_message(99, 99, 99, 99);
                                         break;
                                 }
-
                                 break;
                         }
-                        //delay_ms(300);
                     }while((configure_state == TOGGLE) && (sw != 0));
-
                     break;
                 case HOUR:
                     hour = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCHOUR));             // retrieve current hour value
@@ -156,7 +142,6 @@ int main(void)
                     UARTCharPut(UART0_BASE, (hour / 10) + 48);
                     UARTCharPut(UART0_BASE, (hour % 10) + 48);
                     UARTCharPut(UART0_BASE, '\r');
-
                     do{
                         switch(button_poll()){
                             case toggle_b:
@@ -196,7 +181,6 @@ int main(void)
                                 break;
                         }
                         I2CSend(SLAVE_ADDR, 2, RTCHOUR, dec_to_bcd(hour));          // store hour value
-                        //delay_ms(300);
                     }while((configure_state == HOUR) && (sw != 0));
                     break;
                 case MINUTE:
@@ -205,7 +189,6 @@ int main(void)
                     UARTCharPut(UART0_BASE, (minute / 10) + 48);
                     UARTCharPut(UART0_BASE, (minute % 10) + 48);
                     UARTCharPut(UART0_BASE, '\r');
-
                     do{
                         switch(button_poll()){
                             case toggle_b:
@@ -246,7 +229,6 @@ int main(void)
                                 break;
                         }
                         I2CSend(SLAVE_ADDR, 2, RTCMIN, dec_to_bcd(minute));          // store hour value
-                        //delay_ms(300);
                     }while((configure_state == MINUTE) && (sw != 0));
                     break;
                 case CLOCK:
@@ -295,9 +277,7 @@ int main(void)
                                 sseg_message(hour / 10, (hour % 10) + 10, minute / 10, minute % 10);
                                 break;
                         }
-                        //delay_ms(400);
                     }while((configure_state == CLOCK) && (sw != 0));
-
                     break;
                 case BRIGHT:
                     UART_OutString2(brightness_toggle);                     // Display current brightness toggle mode
@@ -321,10 +301,13 @@ int main(void)
                                 }else{
                                     brightness_toggle++;
                                 }
+
                                 UART_OutString2(brightness_toggle);         // Display current brightness toggle mode
+
+                                led_value = adjust_brightness(color_toggle, brightness_toggle);
+
                                 for(i = 0; i < 20; i++){
-                                    //SendColor(RED_HEX);
-                                    SendColor(color_toggle);
+                                    send_color(led_value);
                                 }
                                 break;
                             case color_b:
@@ -350,12 +333,9 @@ int main(void)
                                         sseg_message(99, 99, 99, 99);
                                         break;
                                 }
-
                                 break;
                         }
-                        //delay_ms(300);
                     }while((configure_state == BRIGHT) && (sw != 0));
-
                     break;
                 case COLOR:
                     do{
@@ -394,28 +374,25 @@ int main(void)
                                         break;
                                 }
 
-                                for(i = 0; i < 20; i++){
-                                    SendColor(color_toggle);
-                                }
+                                led_value = adjust_brightness(color_toggle, brightness_toggle);
 
+                                for(i = 0; i < 20; i++){
+                                    send_color(led_value);
+                                }
                                 break;
                             default:
-                                //sw = GPIOPinRead(GPIO_PORTC_BASE, GPIO_PIN_4);      // default - check switch
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-                                //sw = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_2);
                                 break;
                         }
                     }while((configure_state == COLOR) && (sw != 0));
                     break;
-
             }
         }
 
+            // POV Mode
             UART_OutString(9);
             configure_state = INIT;         // reset configuration state to INIT for next configuration
-
             sseg_message(12,13,15,16);
-
     }
 }
 
@@ -426,7 +403,7 @@ uint8_t button_poll(){
     uint32_t clock_input = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_4);
     uint32_t minute_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_7);
     uint32_t brightness_input = GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0);
-    uint32_t color_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_3);
+    uint32_t color_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_2);
 
     if(toggle_input != 0){
         delay_ms(250);
@@ -451,12 +428,12 @@ uint8_t button_poll(){
     }
 }
 
-uint32_t adjust_brightness(uint32_t color){
+uint32_t adjust_brightness(uint32_t color, uint8_t brightness){
     uint32_t red = color & 0xFF0000;
     uint32_t blue = color & 0x00FF00;
     uint32_t green = color & 0x0000FF;
 
-    switch(brightness_toggle){
+    switch(brightness){
         case 0:
             return color;
         case 1: // 75%
@@ -480,11 +457,9 @@ uint32_t adjust_brightness(uint32_t color){
     return(red | blue | green);
 }
 
-void SendColor(int color){
+void send_color(uint32_t color){
     int count = 0;
     int hex = 0;
-
-    color = adjust_brightness(color);
 
     for(count = 24; count > 0; count--){
         hex = color >> count;               // right shifts count times
@@ -579,13 +554,5 @@ void SendColor(int color){
 
         }
     }
-}
-
-void delay_ms(uint32_t ui32Ms) {
-    SysCtlDelay(ui32Ms * (SysCtlClockGet() / 3 / 1000));
-}
-
-void delay_us(uint32_t ui32Us) {
-    SysCtlDelay(ui32Us * (SysCtlClockGet() / 3 / 1000000));
 }
 

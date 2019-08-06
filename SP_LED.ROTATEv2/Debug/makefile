@@ -11,6 +11,7 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./main.obj" \
+"./misc.obj" \
 "./rtcc.obj" \
 "./sendcolor.obj" \
 "./setup.obj" \
@@ -161,8 +162,8 @@ SP_LED.ROTATEv2.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "rtcc.obj" "sendcolor.obj" "setup.obj" "sseg.obj" "tm4c123gh6pm_startup_ccs.obj" "uart_out.obj" 
-	-$(RM) "main.d" "rtcc.d" "sendcolor.d" "setup.d" "sseg.d" "tm4c123gh6pm_startup_ccs.d" "uart_out.d" 
+	-$(RM) "main.obj" "misc.obj" "rtcc.obj" "sendcolor.obj" "setup.obj" "sseg.obj" "tm4c123gh6pm_startup_ccs.obj" "uart_out.obj" 
+	-$(RM) "main.d" "misc.d" "rtcc.d" "sendcolor.d" "setup.d" "sseg.d" "tm4c123gh6pm_startup_ccs.d" "uart_out.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -14,6 +14,7 @@
 #include "driverlib/i2c.h"
 
 #include "setup.h"
+#include "misc.h"
 
 void setup(void){
 

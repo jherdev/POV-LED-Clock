@@ -13,6 +13,7 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib
 
 C_SRCS += \
 ../main.c \
+../misc.c \
 ../rtcc.c \
 ../sendcolor.c \
 ../setup.c \
@@ -22,6 +23,7 @@ C_SRCS += \
 
 C_DEPS += \
 ./main.d \
+./misc.d \
 ./rtcc.d \
 ./sendcolor.d \
 ./setup.d \
@@ -31,6 +33,7 @@ C_DEPS += \
 
 OBJS += \
 ./main.obj \
+./misc.obj \
 ./rtcc.obj \
 ./sendcolor.obj \
 ./setup.obj \
@@ -40,6 +43,7 @@ OBJS += \
 
 OBJS__QUOTED += \
 "main.obj" \
+"misc.obj" \
 "rtcc.obj" \
 "sendcolor.obj" \
 "setup.obj" \
@@ -49,6 +53,7 @@ OBJS__QUOTED += \
 
 C_DEPS__QUOTED += \
 "main.d" \
+"misc.d" \
 "rtcc.d" \
 "sendcolor.d" \
 "setup.d" \
@@ -58,6 +63,7 @@ C_DEPS__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../main.c" \
+"../misc.c" \
 "../rtcc.c" \
 "../sendcolor.c" \
 "../setup.c" \

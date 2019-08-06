@@ -111,11 +111,3 @@ uint32_t I2CReceive(uint8_t slave_addr, uint8_t reg)
     //return data pulled from the specified register
     return I2CMasterDataGet(I2C1_BASE);
 }
-
-uint8_t dec_to_bcd(uint32_t value){
-    return ((value % 10) + ((value / 10) << 4));
-}
-
-uint8_t bcd_to_dec(uint32_t value){
-    return value - 6 * (value >> 4);
-}

@@ -14,6 +14,7 @@
 #include "driverlib/i2c.h"
 
 #include "sseg.h"
+#include "misc.h"
 
 void sseg_message(uint8_t dig1, uint8_t dig2, uint8_t dig3, uint8_t dig4){
     sseg_digit_select(1);

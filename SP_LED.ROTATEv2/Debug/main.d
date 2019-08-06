@@ -28,6 +28,7 @@ main.obj: ../uart_out.h
 main.obj: ../setup.h
 main.obj: ../rtcc.h
 main.obj: ../sseg.h
+main.obj: ../misc.h
 
 ../main.c: 
 C:/ti/ccsv8/tools/compiler/ti-cgt-arm_18.1.4.LTS/include/stdio.h: 
@@ -57,3 +58,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/i2c.h:
 ../setup.h: 
 ../rtcc.h: 
 ../sseg.h: 
+../misc.h: 
