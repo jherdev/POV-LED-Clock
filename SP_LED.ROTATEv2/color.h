@@ -10,6 +10,8 @@
 #define WHITE_HEX   0xFFFFFF
 #define CLEAR_HEX   0x000000
 
+// add more colors? orange?
+
 #endif /* COLOR_H_ */
 
 

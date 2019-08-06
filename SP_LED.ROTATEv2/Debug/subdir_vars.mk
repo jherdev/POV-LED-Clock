@@ -12,6 +12,7 @@ LIB_SRCS += \
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/ccs/Debug/driverlib.lib 
 
 C_SRCS += \
+../led.c \
 ../main.c \
 ../misc.c \
 ../rtcc.c \
@@ -22,6 +23,7 @@ C_SRCS += \
 ../uart_out.c 
 
 C_DEPS += \
+./led.d \
 ./main.d \
 ./misc.d \
 ./rtcc.d \
@@ -32,6 +34,7 @@ C_DEPS += \
 ./uart_out.d 
 
 OBJS += \
+./led.obj \
 ./main.obj \
 ./misc.obj \
 ./rtcc.obj \
@@ -42,6 +45,7 @@ OBJS += \
 ./uart_out.obj 
 
 OBJS__QUOTED += \
+"led.obj" \
 "main.obj" \
 "misc.obj" \
 "rtcc.obj" \
@@ -52,6 +56,7 @@ OBJS__QUOTED += \
 "uart_out.obj" 
 
 C_DEPS__QUOTED += \
+"led.d" \
 "main.d" \
 "misc.d" \
 "rtcc.d" \
@@ -62,6 +67,7 @@ C_DEPS__QUOTED += \
 "uart_out.d" 
 
 C_SRCS__QUOTED += \
+"../led.c" \
 "../main.c" \
 "../misc.c" \
 "../rtcc.c" \

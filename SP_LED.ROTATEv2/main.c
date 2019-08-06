@@ -18,28 +18,20 @@
 #include "setup.h"
 #include "rtcc.h"
 #include "sseg.h"
+#include "led.h"
 #include "misc.h"
 
-uint32_t adjust_brightness(uint32_t color, uint8_t brightness);
-void send_color(uint32_t color);
+//uint32_t adjust_brightness(uint32_t color, uint8_t brightness);
+//void send_color(uint32_t color);
 
 enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b, color_b};
 uint8_t button_poll(void);
 
 int main(void)
 {
-
-    setup();
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     int i = 0;
     uint8_t sw = 0;
 
-    //uint8_t year = 0;
-    //uint8_t month = 0;
-    //uint8_t date = 0;
-    //uint8_t wkday = 0;
     uint8_t hour = 0;
     uint8_t minute = 0;
     uint8_t second = 0;
@@ -49,10 +41,15 @@ int main(void)
     uint32_t color_toggle = RED_HEX;
     uint32_t led_value = 0;
 
-    //uint32_t count = 0;
-
     enum state{INIT, TOGGLE, HOUR, MINUTE, CLOCK, BRIGHT, COLOR};
     uint8_t configure_state = INIT;
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    setup();                    // executes setup code enabling system peripherals
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     while(1)
     {
@@ -428,131 +425,131 @@ uint8_t button_poll(){
     }
 }
 
-uint32_t adjust_brightness(uint32_t color, uint8_t brightness){
-    uint32_t red = color & 0xFF0000;
-    uint32_t blue = color & 0x00FF00;
-    uint32_t green = color & 0x0000FF;
+//uint32_t adjust_brightness(uint32_t color, uint8_t brightness){
+//    uint32_t red = color & 0xFF0000;
+//    uint32_t blue = color & 0x00FF00;
+//    uint32_t green = color & 0x0000FF;
+//
+//    switch(brightness){
+//        case 0:
+//            return color;
+//        case 1: // 75%
+//            red = red - ((red >> 2) & 0xFF0000);
+//            blue = blue - ((blue >> 2) & 0x00FF00);
+//            green = green - ((green >> 2) & 0x0000FF);
+//            break;
+//        case 2: // 50%
+//            red = ((red >> 1) & 0xFF0000);
+//            blue = ((blue >> 1) & 0x00FF00);
+//            green = ((green >> 1) & 0x0000FF);
+//            break;
+//        case 3: // 25%
+//            red = ((red >> 2) & 0xFF0000);
+//            blue = ((blue >> 2) & 0x00FF00);
+//            green = ((green >> 2) & 0x0000FF);
+//            break;
+//        default:
+//            return color;
+//    }
+//    return(red | blue | green);
+//}
 
-    switch(brightness){
-        case 0:
-            return color;
-        case 1: // 75%
-            red = red - ((red >> 2) & 0xFF0000);
-            blue = blue - ((blue >> 2) & 0x00FF00);
-            green = green - ((green >> 2) & 0x0000FF);
-            break;
-        case 2: // 50%
-            red = ((red >> 1) & 0xFF0000);
-            blue = ((blue >> 1) & 0x00FF00);
-            green = ((green >> 1) & 0x0000FF);
-            break;
-        case 3: // 25%
-            red = ((red >> 2) & 0xFF0000);
-            blue = ((blue >> 2) & 0x00FF00);
-            green = ((green >> 2) & 0x0000FF);
-            break;
-        default:
-            return color;
-    }
-    return(red | blue | green);
-}
-
-void send_color(uint32_t color){
-    int count = 0;
-    int hex = 0;
-
-    for(count = 24; count > 0; count--){
-        hex = color >> count;               // right shifts count times
-        hex = hex & 1;
-
-        if(hex == 1){
-            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
-            asm(" nop");  //
-            asm(" nop");
-        }else{
-            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-
-            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");  //
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-
-        }
-    }
-}
+//void send_color(uint32_t color){
+//    int count = 0;
+//    int hex = 0;
+//
+//    for(count = 24; count > 0; count--){
+//        hex = color >> count;               // right shifts count times
+//        hex = hex & 1;
+//
+//        if(hex == 1){
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
+//            asm(" nop");  //
+//            asm(" nop");
+//        }else{
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");  //
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//            asm(" nop");
+//
+//        }
+//    }
+//}
 

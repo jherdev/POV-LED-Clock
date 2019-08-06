@@ -67,10 +67,6 @@ void UART_OutString(uint8_t select){
                                      "Retrieving Parameters...\r\n",            // 7
                                      "Exited Time Set State\n",                 // 8
                                      "Returned to POV Mode\r\n",                // 9
-                                     //"Brightness is set to 100% \r\n",           // 10
-                                     //"Brightness is set to 75% \r\n",            // 11
-                                     //"Brightness is set to 50% \r\n",            // 12
-                                     //"Brightness is set to 25% \r\n",             // 13
     };
 
     len = strlen(output_string[select]);

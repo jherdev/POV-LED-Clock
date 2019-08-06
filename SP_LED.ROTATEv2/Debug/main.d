@@ -28,6 +28,7 @@ main.obj: ../uart_out.h
 main.obj: ../setup.h
 main.obj: ../rtcc.h
 main.obj: ../sseg.h
+main.obj: ../led.h
 main.obj: ../misc.h
 
 ../main.c: 
@@ -58,4 +59,5 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/i2c.h:
 ../setup.h: 
 ../rtcc.h: 
 ../sseg.h: 
+../led.h: 
 ../misc.h: 
