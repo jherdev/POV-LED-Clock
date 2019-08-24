@@ -30,3 +30,7 @@ void delay_ms(uint32_t ui32Ms) {
 void delay_us(uint32_t ui32Us) {
     SysCtlDelay(ui32Us * (SysCtlClockGet() / 3 / 1000000));
 }
+
+uint8_t  hour_reg_mask(uint8_t value){
+    return(value & 0x1F);   // masks settings values on hour register
+}

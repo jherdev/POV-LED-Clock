@@ -42,25 +42,46 @@ void sseg_message(uint8_t dig1, uint8_t dig2, uint8_t dig3, uint8_t dig4){
     sseg_digit_clear();
 }
 
+//void sseg_digit_select(uint8_t value){
+//    switch(value){
+//        case 1:
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_3, 8);   // digit 1
+//            break;
+//        case 2:
+//            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, 4);   // digit 2
+//            break;
+//        case 3:
+//            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_3, 8);   // digit 3
+//            break;
+//        case 4:
+//            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_1, 2);   // digit 4
+//            break;
+//        default:
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_3, 8);   // digit 1
+//            break;
+//    }
+//}
+
 void sseg_digit_select(uint8_t value){
     switch(value){
         case 1:
-            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_3, 8);   // digit 1
+            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_3, 8);   // digit 1
             break;
         case 2:
-            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, 4);   // digit 2
+            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_1, 2);   // digit 2
             break;
         case 3:
-            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_3, 8);   // digit 3
+            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_3, 8);   // digit 3
             break;
         case 4:
-            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_1, 2);   // digit 4
+            GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, 4);   // digit 4
             break;
         default:
             GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_3, 8);   // digit 1
             break;
     }
 }
+
 void sseg_digit_clear(void){
     GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_3, 0);   // digit 1
     GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_2, 0);   // digit 2

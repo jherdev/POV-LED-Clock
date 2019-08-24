@@ -82,11 +82,16 @@ void setup(void){
             I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
          //Initialized RTCC Date set to Wednesday, July 10, 2019 - 4:50 (A/P)M
 
+            //I2CSend(SLAVE_ADDR, 2, RTCHOUR, 0x40);      // sets system to 12 hour
+            //I2CSend(SLAVE_ADDR, 2, RTCHOUR, 0x44);      // sets system to 12 hour, sets hour to 4
+
         // check and clear OSF bit (0x0F control register, bit 7)
+
+
+
         // check and clear EN32kHz (0x0F control register, bit 3)
-        // check to make sure clock is on 12 clock system, not 24 hour
 
-
+            I2CSend(SLAVE_ADDR, 2, STATUS_REG,  0x08);
 }
 
 
