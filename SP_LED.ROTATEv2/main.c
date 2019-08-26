@@ -24,6 +24,8 @@
 enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b, color_b};
 uint8_t button_poll(void);
 
+uint8_t rotation_count = 0;
+
 int main(void)
 {
     int i = 0;
@@ -40,7 +42,6 @@ int main(void)
 
     enum state{INIT, TOGGLE, HOUR, MINUTE, CLOCK, BRIGHT, COLOR};
     uint8_t configure_state = INIT;
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -425,4 +426,11 @@ uint8_t button_poll(){
     }else{
         return 0;
     }
+}
+
+void HallEffectSensorHandler(void){
+
+    rotation_count = 0;
+
+    // clear interrupt flag
 }
