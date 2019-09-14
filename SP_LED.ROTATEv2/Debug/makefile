@@ -10,11 +10,11 @@ GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG := 
 
 ORDERED_OBJS += \
+"./interrupts.obj" \
 "./led.obj" \
 "./main.obj" \
 "./misc.obj" \
 "./rtcc.obj" \
-"./sendcolor.obj" \
 "./setup.obj" \
 "./sseg.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
@@ -163,8 +163,8 @@ SP_LED.ROTATEv2.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "led.obj" "main.obj" "misc.obj" "rtcc.obj" "sendcolor.obj" "setup.obj" "sseg.obj" "tm4c123gh6pm_startup_ccs.obj" "uart_out.obj" 
-	-$(RM) "led.d" "main.d" "misc.d" "rtcc.d" "sendcolor.d" "setup.d" "sseg.d" "tm4c123gh6pm_startup_ccs.d" "uart_out.d" 
+	-$(RM) "interrupts.obj" "led.obj" "main.obj" "misc.obj" "rtcc.obj" "setup.obj" "sseg.obj" "tm4c123gh6pm_startup_ccs.obj" "uart_out.obj" 
+	-$(RM) "interrupts.d" "led.d" "main.d" "misc.d" "rtcc.d" "setup.d" "sseg.d" "tm4c123gh6pm_startup_ccs.d" "uart_out.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

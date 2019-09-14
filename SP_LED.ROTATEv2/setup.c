@@ -7,6 +7,7 @@
 #include "inc/hw_memmap.h"
 #include "inc/hw_i2c.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/interrupt.h"
 #include "driverlib/gpio.h"
 #include "driverlib/uart.h"
 #include "driverlib/gpio.h"
@@ -15,6 +16,7 @@
 
 #include "setup.h"
 #include "misc.h"
+#include "interrupts.h"
 
 void setup(void){
 
@@ -93,23 +95,16 @@ void setup(void){
 
     I2CSend(SLAVE_ADDR, 2, STATUS_REG,  0x08);
 
+
     // Rising / Falling Edge Interrupt Setup - Hall Effect Sensor
-
     GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_0);  // initialize B0 as input
-
     // enable pull up resistor?
-
     GPIOIntDisable(GPIO_PORTB_BASE, GPIO_PIN_0);        // disable interrupt
-    GPIOIntClear(GPIO_PORTB_BASE, GPIO_PIN_0);          // clear pending interupts
-
-    //GPIOIntRegister(GPIO_PORB_BASE, HallEffectSensorHandler)  / same as modifying startup_ccs.c file
-
-    GPIOIntTypeSet(GPIO_PORTB_BASE_GPIO_PIN_0, GPIO_FALLING_EDGE);  // configure PB0 for falling edge interrupt
-
+    GPIOIntClear(GPIO_PORTB_BASE, GPIO_PIN_0);          // clear pending interrupts
+    GPIOIntRegister(GPIO_PORTB_BASE, HallEffectSensorHandler);  // same as modifying startup_ccs.c file
+    GPIOIntTypeSet(GPIO_PORTB_BASE, GPIO_PIN_0, GPIO_FALLING_EDGE);  // configure PB0 for falling edge interrupt
+    IntMasterEnable();  // enable all interrupts
     GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_0);         // Enable interrupt for PB0
-
-
-
 
 }
 

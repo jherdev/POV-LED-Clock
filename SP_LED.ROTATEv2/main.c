@@ -7,6 +7,7 @@
 #include "inc/hw_memmap.h"
 #include "inc/hw_i2c.h"
 #include "driverlib/sysctl.h"
+#include "driverlib/interrupt.h"
 #include "driverlib/gpio.h"
 #include "driverlib/uart.h"
 #include "driverlib/gpio.h"
@@ -20,11 +21,11 @@
 #include "sseg.h"
 #include "led.h"
 #include "misc.h"
+#include "interrupts.h"
 
 enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b, color_b};
 uint8_t button_poll(void);
-
-uint8_t rotation_count = 0;
+volatile uint8_t rotation_count = 0;
 
 int main(void)
 {
@@ -386,10 +387,10 @@ int main(void)
         }
 
         // POV Mode
-        UART_OutString(9);
-        configure_state = INIT;         // reset configuration state to INIT for next configuration
-        sseg_message(12,13,15,16);
 
+        // needs to only happen once
+            UART_OutString(9);
+            configure_state = INIT;         // reset configuration state to INIT for next configuration
 
         // rising / falling edge interrupt, for hall effect sensor, resets position counter to 0
 
@@ -428,13 +429,3 @@ uint8_t button_poll(){
     }
 }
 
-void HallEffectSensorHandler(void){
-    if(GPIOIntStatus(GPIO_PORTB_BASE, false) & GPIO_PIN_0){ // if PB0 was cause of interrupt
-        rotation_count = 0;
-
-        for(int i = 0; i < 20; i++){
-            send_color(GREEN_HEX);
-        }
-    }
-    GPIOIntClear(GPIO_PORTB_BASE, GPIO_PIN_0)// clear interrupt flag
-}
