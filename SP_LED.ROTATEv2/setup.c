@@ -23,7 +23,7 @@ void setup(void){
 
     // I/O Pin Enable
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);    // Enable GPIO Pin Set A: UART, I2C, 7-Segment
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);    // Enable GPIO Pin Set B: Buttons, 7-Segment
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);    // Enable GPIO Pin Set B: Buttons, 7-Segment, HE Sensor
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);    // Enable GPIO Pin Set C: Buttons
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);    // Enable GPIO Pin Set D: LED Data Output, 7-Segment
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);    // Enable GPIO Pin Set E: 7-Segment
@@ -93,9 +93,20 @@ void setup(void){
 
     I2CSend(SLAVE_ADDR, 2, STATUS_REG,  0x08);
 
-
     // Rising / Falling Edge Interrupt Setup - Hall Effect Sensor
 
+    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_0);  // initialize B0 as input
+
+    // enable pull up resistor?
+
+    GPIOIntDisable(GPIO_PORTB_BASE, GPIO_PIN_0);        // disable interrupt
+    GPIOIntClear(GPIO_PORTB_BASE, GPIO_PIN_0);          // clear pending interupts
+
+    //GPIOIntRegister(GPIO_PORB_BASE, HallEffectSensorHandler)  / same as modifying startup_ccs.c file
+
+    GPIOIntTypeSet(GPIO_PORTB_BASE_GPIO_PIN_0, GPIO_FALLING_EDGE);  // configure PB0 for falling edge interrupt
+
+    GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_0);         // Enable interrupt for PB0
 
 
 

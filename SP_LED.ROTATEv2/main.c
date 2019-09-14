@@ -429,8 +429,12 @@ uint8_t button_poll(){
 }
 
 void HallEffectSensorHandler(void){
+    if(GPIOIntStatus(GPIO_PORTB_BASE, false) & GPIO_PIN_0){ // if PB0 was cause of interrupt
+        rotation_count = 0;
 
-    rotation_count = 0;
-
-    // clear interrupt flag
+        for(int i = 0; i < 20; i++){
+            send_color(GREEN_HEX);
+        }
+    }
+    GPIOIntClear(GPIO_PORTB_BASE, GPIO_PIN_0)// clear interrupt flag
 }
