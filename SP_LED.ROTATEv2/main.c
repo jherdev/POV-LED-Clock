@@ -26,20 +26,24 @@
 enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b, color_b};
 uint8_t button_poll(void);
 volatile uint8_t rotation_count = 0;
+volatile uint8_t display_toggle = 0;
+volatile uint32_t led_value = 0;
 
 int main(void)
 {
     int i = 0;
     uint8_t sw = 0;
+    uint8_t reset = 0;
 
     uint8_t hour = 0;
     uint8_t minute = 0;
     uint8_t second = 0;
 
-    uint8_t display_toggle = 0;
+    //uint8_t display_toggle = 0;
+    //uint32_t led_value = 0;
+
     uint8_t brightness_toggle = 0;
     uint32_t color_toggle = RED_HEX;
-    uint32_t led_value = 0;
 
     enum state{INIT, TOGGLE, HOUR, MINUTE, CLOCK, BRIGHT, COLOR};
     uint8_t configure_state = INIT;
@@ -56,6 +60,7 @@ int main(void)
         while(sw != 0){
             switch(configure_state){
                 case INIT:
+                    IntMasterDisable();
                     UART_OutString(3);      // Display Entered Clock Configuration State
                     UART_OutString(4);      // Display Press Button to Modify Parameter
                     do{
@@ -387,13 +392,14 @@ int main(void)
         }
 
         // POV Mode
-
-        // needs to only happen once
-            UART_OutString(9);
-            configure_state = INIT;         // reset configuration state to INIT for next configuration
+        if(reset == 0){
+            reset = 1;                  // ensures this only occurs once per config/pov state switch
+            UART_OutString(9);          // UART message "Entered POV Mode"
+            configure_state = INIT;     // Resets state for next entry to configuration mode
+            IntMasterEnable();          // Enable interrupts - required for POV ISR
+        }
 
         // rising / falling edge interrupt, for hall effect sensor, resets position counter to 0
-
 
     }
 }

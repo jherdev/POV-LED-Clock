@@ -89,8 +89,6 @@ void setup(void){
 
     // check and clear OSF bit (0x0F control register, bit 7)
 
-
-
     // check and clear EN32kHz (0x0F control register, bit 3)
 
     I2CSend(SLAVE_ADDR, 2, STATUS_REG,  0x08);
@@ -103,7 +101,7 @@ void setup(void){
     GPIOIntClear(GPIO_PORTB_BASE, GPIO_PIN_0);          // clear pending interrupts
     GPIOIntRegister(GPIO_PORTB_BASE, HallEffectSensorHandler);  // same as modifying startup_ccs.c file
     GPIOIntTypeSet(GPIO_PORTB_BASE, GPIO_PIN_0, GPIO_FALLING_EDGE);  // configure PB0 for falling edge interrupt
-    IntMasterEnable();  // enable all interrupts
+//    IntMasterEnable();  // enable all interrupts
     GPIOIntEnable(GPIO_PORTB_BASE, GPIO_PIN_0);         // Enable interrupt for PB0
 
 }
