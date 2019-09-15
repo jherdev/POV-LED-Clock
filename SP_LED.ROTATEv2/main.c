@@ -39,9 +39,6 @@ int main(void)
     uint8_t minute = 0;
     uint8_t second = 0;
 
-    //uint8_t display_toggle = 0;
-    //uint32_t led_value = 0;
-
     uint8_t brightness_toggle = 0;
     uint32_t color_toggle = RED_HEX;
 
@@ -60,6 +57,7 @@ int main(void)
         while(sw != 0){
             switch(configure_state){
                 case INIT:
+                    reset = 0;
                     IntMasterDisable();
                     UART_OutString(3);      // Display Entered Clock Configuration State
                     UART_OutString(4);      // Display Press Button to Modify Parameter
