@@ -31,7 +31,82 @@ void HallEffectSensorHandler(void){
 
                 for(j = 0; j < 5; ++j){
                     for(i = 0; i < 20; ++i){
-                        if(led_eight[j][i]){
+                        if(led_zero[j][i]){
+                            send_color(led_value);
+                        }else{
+                            send_color(CLEAR_HEX);
+                        }
+                    }
+                    delay_ms(1);
+                }
+
+                for(i = 0; i < 20; ++i){
+                    send_color(CLEAR_HEX);
+                }
+
+                for(j = 0; j < 5; ++j){
+                    for(i = 0; i < 20; ++i){
+                        if(led_one[j][i]){
+                            send_color(led_value);
+                        }else{
+                            send_color(CLEAR_HEX);
+                        }
+                    }
+                    delay_ms(1);
+                }
+
+                for(i = 0; i < 20; ++i){
+                    send_color(CLEAR_HEX);
+                }
+
+                for(j = 0; j < 5; ++j){
+                    for(i = 0; i < 20; ++i){
+                        if(led_two[j][i]){
+                            send_color(led_value);
+                        }else{
+                            send_color(CLEAR_HEX);
+                        }
+                    }
+                    delay_ms(1);
+                }
+
+                for(i = 0; i < 20; ++i){
+                    send_color(CLEAR_HEX);
+                }
+
+                for(j = 0; j < 5; ++j){
+                    for(i = 0; i < 20; ++i){
+                        if(led_three[j][i]){
+                            send_color(led_value);
+                        }else{
+                            send_color(CLEAR_HEX);
+                        }
+                    }
+                    delay_ms(1);
+                }
+
+                for(i = 0; i < 20; ++i){
+                    send_color(CLEAR_HEX);
+                }
+
+                for(j = 0; j < 5; ++j){
+                    for(i = 0; i < 20; ++i){
+                        if(led_four[j][i]){
+                            send_color(led_value);
+                        }else{
+                            send_color(CLEAR_HEX);
+                        }
+                    }
+                    delay_ms(1);
+                }
+
+                for(i = 0; i < 20; ++i){
+                    send_color(CLEAR_HEX);
+                }
+
+                for(j = 0; j < 5; ++j){
+                    for(i = 0; i < 20; ++i){
+                        if(led_five[j][i]){
                             send_color(led_value);
                         }else{
                             send_color(CLEAR_HEX);
