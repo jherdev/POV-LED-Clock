@@ -70,7 +70,7 @@ void setup(void){
 
     HWREG(I2C1_BASE + I2C_O_FIFOCTL) = 80008000;        // clear I2C FIFOs
 
-    delay_ms(200); // waiting 0.2 seconds after power up of RTCC - requires further testing
+    delay_ms(200); // waiting 0.2 seconds after power up of RTCC
 
     enum day{SUNDAY = 1, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
     enum month{JANUARY = 1 , FEBRUARY, MARCH, APRIL, MAY, JUNE, JULY, AUGUST, SEPTEMBER, OCTOBER = 0x10, NOVEMBER = 0x11, DECEMBER = 0x12};
@@ -83,9 +83,6 @@ void setup(void){
     I2CSend(SLAVE_ADDR, 2,  RTCMONTH,   JULY);
     I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
     //Initialized RTCC Date set to Wednesday, July 10, 2019 - 4:50 (A/P)M
-
-    //I2CSend(SLAVE_ADDR, 2, RTCHOUR, 0x40);      // sets system to 12 hour
-    //I2CSend(SLAVE_ADDR, 2, RTCHOUR, 0x44);      // sets system to 12 hour, sets hour to 4
 
     // check and clear OSF bit (0x0F control register, bit 7)
 

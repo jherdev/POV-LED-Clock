@@ -19,118 +19,112 @@
 #include "led.h"
 #include "led_map.h"
 #include "misc.h"
+#include "rtcc.h"
 
 void HallEffectSensorHandler(void){
 
     int i = 0;
     int j = 0;
 
-    if(GPIOIntStatus(GPIO_PORTB_BASE, false) & GPIO_PIN_0){ // if PB0 was cause of interrupt
+    if(GPIOIntStatus(GPIO_PORTB_BASE, false) & GPIO_PIN_0){                 // if PB0 was cause of interrupt
         switch(display_toggle){
             case 0: // 12 Hour
 
-//                for(j = 0; j < 5; ++j){
-//                    for(i = 0; i < 20; ++i){
-//                        if(led_zero[j][i]){
-//                            send_color(led_value);
-//                        }else{
-//                            send_color(CLEAR_HEX);
-//                        }
-//                    }
-//                    //delay_ms(1);
-//                    delay_us(400);
-//                }
-//
-//                for(i = 0; i < 20; ++i){
-//                    send_color(CLEAR_HEX);
-//                }
-//
-//                for(j = 0; j < 5; ++j){
-//                    for(i = 0; i < 20; ++i){
-//                        if(led_one[j][i]){
-//                            send_color(led_value);
-//                        }else{
-//                            send_color(CLEAR_HEX);
-//                        }
-//                    }
-//                    //delay_ms(1);
-//                    delay_us(400);
-//                }
-//
-//                for(i = 0; i < 20; ++i){
-//                    send_color(CLEAR_HEX);
-//                }
+                if(rotation_count == 30){
+                    rotation_count = 0;                                     // reset rotation
+                    hour = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCHOUR));     // retrieve current hour value
+                    minute = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCMIN));    // retrieve current minute value
 
-                for(j = 0; j < 5; ++j){
-                    for(i = 0; i < 20; ++i){
-                        if(led_two[j][i]){
-                            send_color(led_value);
-                        }else{
-                            send_color(CLEAR_HEX);
+                }else{
+                    rotation_count++;
+                    delay_ms(2);                                            // allow for small delay
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(j = 0; j < 5; ++j){
+                        for(i = 0; i < 20; ++i){
+                            if(LED_MAP[(minute % 10) * 5][20]){             // minute % 10
+                                send_color(led_value);
+                            }else{
+                                send_color(led_value);
+                            }
                         }
+                        delay_us(300);
                     }
-                    //delay_ms(1);
-                    delay_us(400);
-                }
-
-                for(i = 0; i < 20; ++i){
-                    send_color(CLEAR_HEX);
-                }
-
-                delay_ms(2);
-
-                for(j = 0; j < 5; ++j){
                     for(i = 0; i < 20; ++i){
-                        if(led_three[j][i]){
-                            send_color(led_value);
-                        }else{
-                            send_color(CLEAR_HEX);
-                        }
+                        send_color(CLEAR_HEX);
                     }
-                    //delay_ms(1);
-                    delay_us(400);
-                }
+                    delay_ms(2);
 
-                for(i = 0; i < 20; ++i){
-                    send_color(CLEAR_HEX);
-                }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                delay_ms(2);
-
-                for(j = 0; j < 5; ++j){
+                    for(j = 0; j < 5; ++j){
+                        for(i = 0; i < 20; ++i){
+                            if(LED_MAP[(minute / 10) * 5][20]){             // minute / 10
+                                send_color(led_value);
+                            }else{
+                                send_color(led_value);
+                            }
+                        }
+                        delay_us(300);
+                    }
                     for(i = 0; i < 20; ++i){
-                        if(led_four[j][i]){
-                            send_color(led_value);
-                        }else{
-                            send_color(CLEAR_HEX);
-                        }
+                        send_color(CLEAR_HEX);
                     }
-                    //delay_ms(1);
-                    delay_us(400);
-                }
+                    delay_ms(2);
 
-                for(i = 0; i < 20; ++i){
-                    send_color(CLEAR_HEX);
-                }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                delay_ms(2);
-
-                for(j = 0; j < 5; ++j){
+                    for(j = 0; j < 5; ++j){
+                        for(i = 0; i < 20; ++i){
+                            if(LED_MAP[50][20]){                            // colon
+                                send_color(led_value);
+                            }else{
+                                send_color(led_value);
+                            }
+                        }
+                        delay_us(300);
+                    }
                     for(i = 0; i < 20; ++i){
-                        if(led_five[j][i]){
-                            send_color(led_value);
-                        }else{
-                            send_color(CLEAR_HEX);
-                        }
+                        send_color(CLEAR_HEX);
                     }
-                    //delay_ms(1);
-                    delay_us(400);
-                }
+                    delay_ms(2);
 
-                for(i = 0; i < 20; ++i){
-                    send_color(CLEAR_HEX);
-                }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+                    for(j = 0; j < 5; ++j){
+                        for(i = 0; i < 20; ++i){
+                            if(LED_MAP[(hour % 10) * 5][20]){               // hour % 10
+                                send_color(led_value);
+                            }else{
+                                send_color(led_value);
+                            }
+                        }
+                        delay_us(300);
+                    }
+                    for(i = 0; i < 20; ++i){
+                        send_color(CLEAR_HEX);
+                    }
+                    delay_ms(2);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                    for(j = 0; j < 5; ++j){
+                        for(i = 0; i < 20; ++i){
+                            if(LED_MAP[(hour / 10) * 5][20]){               // hour / 10
+                                send_color(led_value);
+                            }else{
+                                send_color(led_value);
+                            }
+                        }
+                        delay_us(300);
+                    }
+                    for(i = 0; i < 20; ++i){
+                        send_color(CLEAR_HEX);
+                    }
+                    delay_ms(2);
+                }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 break;
             case 1: // 24 Hour
                 break;

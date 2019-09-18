@@ -29,14 +29,14 @@ volatile uint8_t rotation_count = 0;
 volatile uint8_t display_toggle = 0;
 volatile uint32_t led_value = 0;
 
+volatile uint8_t hour = 0;
+volatile uint8_t minute = 0;
+
 int main(void)
 {
     int i = 0;
     uint8_t sw = 0;
     uint8_t reset = 0;
-
-    uint8_t hour = 0;
-    uint8_t minute = 0;
     uint8_t second = 0;
 
     uint8_t brightness_toggle = 0;
@@ -47,7 +47,10 @@ int main(void)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    setup();                    // executes setup code enabling system peripherals
+    setup();                                                // executes setup code enabling system peripherals
+
+    hour = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCHOUR));     // retrieve current hour value
+    minute = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCMIN));    // retrieve current minute value
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -137,7 +140,6 @@ int main(void)
                     break;
                 case HOUR:
                     hour = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCHOUR));             // retrieve current hour value
-                    // hour = bcd_to_dec(hour_reg_mask(I2CReceive(SLAVE_ADDR, RTCHOUR));    // retrieve and decode hour value
                     UART_OutString(5);                                              // display current hour value
                     UARTCharPut(UART0_BASE, (hour / 10) + 48);
                     UARTCharPut(UART0_BASE, (hour % 10) + 48);
@@ -149,8 +151,8 @@ int main(void)
                                 UARTCharPut(UART0_BASE, '\n');
                                 break;
                             case hour_b:
-                                if(hour == 12){
-                                    hour = 1;
+                                if(hour == 23){
+                                    hour = 0;
                                 }else{
                                     hour++;
                                 }
