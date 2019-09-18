@@ -18,7 +18,7 @@ int main(void)
     int PWMClock = 0;
     int PWMRate = 0;
 
-    PWMRate = 930;  // (PWMRATE / 10 = duty cycle)
+    PWMRate = 920;  // (PWMRATE / 10 = duty cycle)
 
     SysCtlClockSet(SYSCTL_SYSDIV_5|SYSCTL_USE_PLL|SYSCTL_OSC_MAIN|SYSCTL_XTAL_16MHZ);   // 40 MHz
     SysCtlPWMClockSet(SYSCTL_PWMDIV_64);

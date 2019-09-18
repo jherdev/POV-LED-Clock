@@ -29,35 +29,37 @@ void HallEffectSensorHandler(void){
         switch(display_toggle){
             case 0: // 12 Hour
 
-                for(j = 0; j < 5; ++j){
-                    for(i = 0; i < 20; ++i){
-                        if(led_zero[j][i]){
-                            send_color(led_value);
-                        }else{
-                            send_color(CLEAR_HEX);
-                        }
-                    }
-                    delay_ms(1);
-                }
-
-                for(i = 0; i < 20; ++i){
-                    send_color(CLEAR_HEX);
-                }
-
-                for(j = 0; j < 5; ++j){
-                    for(i = 0; i < 20; ++i){
-                        if(led_one[j][i]){
-                            send_color(led_value);
-                        }else{
-                            send_color(CLEAR_HEX);
-                        }
-                    }
-                    delay_ms(1);
-                }
-
-                for(i = 0; i < 20; ++i){
-                    send_color(CLEAR_HEX);
-                }
+//                for(j = 0; j < 5; ++j){
+//                    for(i = 0; i < 20; ++i){
+//                        if(led_zero[j][i]){
+//                            send_color(led_value);
+//                        }else{
+//                            send_color(CLEAR_HEX);
+//                        }
+//                    }
+//                    //delay_ms(1);
+//                    delay_us(400);
+//                }
+//
+//                for(i = 0; i < 20; ++i){
+//                    send_color(CLEAR_HEX);
+//                }
+//
+//                for(j = 0; j < 5; ++j){
+//                    for(i = 0; i < 20; ++i){
+//                        if(led_one[j][i]){
+//                            send_color(led_value);
+//                        }else{
+//                            send_color(CLEAR_HEX);
+//                        }
+//                    }
+//                    //delay_ms(1);
+//                    delay_us(400);
+//                }
+//
+//                for(i = 0; i < 20; ++i){
+//                    send_color(CLEAR_HEX);
+//                }
 
                 for(j = 0; j < 5; ++j){
                     for(i = 0; i < 20; ++i){
@@ -67,12 +69,15 @@ void HallEffectSensorHandler(void){
                             send_color(CLEAR_HEX);
                         }
                     }
-                    delay_ms(1);
+                    //delay_ms(1);
+                    delay_us(400);
                 }
 
                 for(i = 0; i < 20; ++i){
                     send_color(CLEAR_HEX);
                 }
+
+                delay_ms(2);
 
                 for(j = 0; j < 5; ++j){
                     for(i = 0; i < 20; ++i){
@@ -82,12 +87,15 @@ void HallEffectSensorHandler(void){
                             send_color(CLEAR_HEX);
                         }
                     }
-                    delay_ms(1);
+                    //delay_ms(1);
+                    delay_us(400);
                 }
 
                 for(i = 0; i < 20; ++i){
                     send_color(CLEAR_HEX);
                 }
+
+                delay_ms(2);
 
                 for(j = 0; j < 5; ++j){
                     for(i = 0; i < 20; ++i){
@@ -97,12 +105,15 @@ void HallEffectSensorHandler(void){
                             send_color(CLEAR_HEX);
                         }
                     }
-                    delay_ms(1);
+                    //delay_ms(1);
+                    delay_us(400);
                 }
 
                 for(i = 0; i < 20; ++i){
                     send_color(CLEAR_HEX);
                 }
+
+                delay_ms(2);
 
                 for(j = 0; j < 5; ++j){
                     for(i = 0; i < 20; ++i){
@@ -112,7 +123,8 @@ void HallEffectSensorHandler(void){
                             send_color(CLEAR_HEX);
                         }
                     }
-                    delay_ms(1);
+                    //delay_ms(1);
+                    delay_us(400);
                 }
 
                 for(i = 0; i < 20; ++i){
