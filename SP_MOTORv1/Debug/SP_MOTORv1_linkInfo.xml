@@ -2,7 +2,7 @@
 <link_info>
    <banner>TI ARM Linker PC v18.1.4.LTS</banner>
    <copyright>Copyright (c) 1996-2018 Texas Instruments Incorporated</copyright>
-   <link_time>0x5cef9ff6</link_time>
+   <link_time>0x5d8195c1</link_time>
    <link_errors>0x0</link_errors>
    <output_file>SP_MOTORv1.out</output_file>
    <entry_point>
@@ -452,7 +452,7 @@
          <size>0x276</size>
          <input_file_ref idref="fl-b"/>
       </object_component>
-      <object_component id="oc-ea">
+      <object_component id="oc-eb">
          <name>.debug_info</name>
          <load_address>0x3052</load_address>
          <run_address>0x3052</run_address>
@@ -696,7 +696,7 @@
          <size>0x91</size>
          <input_file_ref idref="fl-b"/>
       </object_component>
-      <object_component id="oc-ed">
+      <object_component id="oc-ea">
          <name>.debug_line</name>
          <load_address>0xaa2</load_address>
          <run_address>0xaa2</run_address>
@@ -1269,7 +1269,7 @@
          <size>0x20</size>
          <input_file_ref idref="fl-b"/>
       </object_component>
-      <object_component id="oc-eb">
+      <object_component id="oc-ec">
          <name>.debug_aranges</name>
          <load_address>0x158</load_address>
          <run_address>0x158</run_address>
@@ -1409,7 +1409,7 @@
          <size>0x23</size>
          <input_file_ref idref="fl-b"/>
       </object_component>
-      <object_component id="oc-ec">
+      <object_component id="oc-ed">
          <name>.debug_pubnames</name>
          <load_address>0x1e2</load_address>
          <run_address>0x1e2</run_address>
@@ -1676,7 +1676,7 @@
             <object_component_ref idref="oc-fd"/>
             <object_component_ref idref="oc-f1"/>
             <object_component_ref idref="oc-103"/>
-            <object_component_ref idref="oc-ea"/>
+            <object_component_ref idref="oc-eb"/>
             <object_component_ref idref="oc-14f"/>
             <object_component_ref idref="oc-165"/>
             <object_component_ref idref="oc-d2"/>
@@ -1719,7 +1719,7 @@
             <object_component_ref idref="oc-fc"/>
             <object_component_ref idref="oc-f0"/>
             <object_component_ref idref="oc-102"/>
-            <object_component_ref idref="oc-ed"/>
+            <object_component_ref idref="oc-ea"/>
             <object_component_ref idref="oc-18f"/>
             <object_component_ref idref="oc-19c"/>
             <object_component_ref idref="oc-d5"/>
@@ -1833,7 +1833,7 @@
             <object_component_ref idref="oc-fe"/>
             <object_component_ref idref="oc-f2"/>
             <object_component_ref idref="oc-104"/>
-            <object_component_ref idref="oc-eb"/>
+            <object_component_ref idref="oc-ec"/>
             <object_component_ref idref="oc-d3"/>
             <object_component_ref idref="oc-cd"/>
             <object_component_ref idref="oc-c7"/>
@@ -1861,7 +1861,7 @@
             <object_component_ref idref="oc-ff"/>
             <object_component_ref idref="oc-f3"/>
             <object_component_ref idref="oc-105"/>
-            <object_component_ref idref="oc-ec"/>
+            <object_component_ref idref="oc-ed"/>
             <object_component_ref idref="oc-166"/>
             <object_component_ref idref="oc-d4"/>
             <object_component_ref idref="oc-ce"/>
