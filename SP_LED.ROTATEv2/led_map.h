@@ -1,6 +1,8 @@
 #ifndef LED_MAP_H_
 #define LED_MAP_H_
 
+#define HC_DEGREE   60
+
 const bool LED_MAP[55][20] = {
                               {
                                {false,   false,  false,  false,  false,  false,  false,  false,  false,  false,  true,   true,   true,   true,   true,   true,   true,   true,   true,   false},    // 0 - 4
@@ -161,7 +163,7 @@ const bool led_zero[5][20] = {
 
 
 
-const bool LED_HC[60][20] = {
+const bool LED_HC[HC_DEGREE][20] = {
                               {false,   false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  true,   true,   true},      // hour notch
                               {false,   false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false},     // 0 - 1
                               {false,   false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false,  false},     // 0 - 2
