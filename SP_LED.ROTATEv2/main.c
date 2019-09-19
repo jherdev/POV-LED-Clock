@@ -388,6 +388,12 @@ int main(void)
                         }
                     }while((configure_state == COLOR) && (sw != 0));
                     break;
+                default:
+
+                    sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
+                    configure_state = INIT;
+
+                    break;
             }
         }
 
@@ -397,6 +403,11 @@ int main(void)
             UART_OutString(9);          // UART message "Entered POV Mode"
             configure_state = INIT;     // Resets state for next entry to configuration mode
             IntMasterEnable();          // Enable interrupts - required for POV ISR
+
+            for(i = 0; i < 20; i++){    // clear LED column from configuration values
+                send_color(led_value);
+            }
+
         }
 
         // rising / falling edge interrupt, for hall effect sensor, resets position counter to 0

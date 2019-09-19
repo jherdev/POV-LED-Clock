@@ -82,12 +82,11 @@ void setup(void){
     I2CSend(SLAVE_ADDR, 2,  RTCDATE,    0x10);
     I2CSend(SLAVE_ADDR, 2,  RTCMONTH,   JULY);
     I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
-    //Initialized RTCC Date set to Wednesday, July 10, 2019 - 4:50 (A/P)M
+    //Initialized RTCC Date set to Wednesday, July 10, 2019 - 0450 Hours
 
     // check and clear OSF bit (0x0F control register, bit 7)
 
     // check and clear EN32kHz (0x0F control register, bit 3)
-
     I2CSend(SLAVE_ADDR, 2, STATUS_REG,  0x08);
 
 
