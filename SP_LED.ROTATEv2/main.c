@@ -47,10 +47,12 @@ int main(void)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    setup();                                                // executes setup code enabling system peripherals
+    setup();                                                            // executes setup code enabling system peripherals
 
-    hour = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCHOUR));     // retrieve current hour value
-    minute = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCMIN));    // retrieve current minute value
+    hour = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCHOUR));                 // retrieve current hour value
+    minute = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCMIN));                // retrieve current minute value
+
+    led_value = adjust_brightness(color_toggle, brightness_toggle);     // default color RED, default brightness 100%
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -179,7 +181,7 @@ int main(void)
                                 break;
                             default:
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
-                                sseg_message(99,99, hour/10, hour % 10);
+                                sseg_message(hour/10, hour % 10, 99, 99);
                                 break;
                         }
                         I2CSend(SLAVE_ADDR, 2, RTCHOUR, dec_to_bcd(hour));          // store hour value
@@ -405,7 +407,7 @@ int main(void)
             IntMasterEnable();          // Enable interrupts - required for POV ISR
 
             for(i = 0; i < 20; i++){    // clear LED column from configuration values
-                send_color(led_value);
+                send_color(CLEAR_HEX);
             }
 
         }
