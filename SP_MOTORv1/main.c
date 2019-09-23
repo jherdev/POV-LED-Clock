@@ -10,6 +10,8 @@
 #include "inc/hw_gpio.h"
 #include "driverlib/rom.h"
 
+void delay_ms(uint32_t ui32Ms);
+
 #define PWM_FREQUENCY 50 // Frequency in Hertz (Hz)
 
 int main(void)
@@ -25,6 +27,9 @@ int main(void)
 
     SysCtlPeripheralEnable(SYSCTL_PERIPH_PWM1);     // Enable PWM1 -
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);    // GPIO Pin Group D Enable
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);    // GPIO Pin Group A Enable
+
+    GPIOPinTypeGPIOInput(GPIO_PORTA_BASE, GPIO_PIN_5);  // switch signal input
 
     GPIOPinTypePWM(GPIO_PORTD_BASE, GPIO_PIN_0);    // Convert D0 to PWM Output
     GPIOPinConfigure(GPIO_PD0_M1PWM0);              // Connect D0 to PWM1
@@ -40,9 +45,25 @@ int main(void)
 
     while(1)
     {
+        if(GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_5) == 32){
+            PWMRate = 1000;
+            PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, PWMRate * Load / 1000);
+            do{
+                delay_ms(500);
+            }while(GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_5) == 32);
+        }
 
+        if(GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_5) == 0){
+            PWMRate = 920;
+            PWMPulseWidthSet(PWM1_BASE, PWM_OUT_0, PWMRate * Load / 1000);
+            do{
+                delay_ms(500);
+            }while(GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_5) == 0);
+        }
     }
 }
 
-
+void delay_ms(uint32_t ui32Ms) {
+    SysCtlDelay(ui32Ms * (SysCtlClockGet() / 3 / 1000));
+}
 

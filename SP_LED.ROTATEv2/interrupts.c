@@ -272,6 +272,7 @@ void HallEffectSensorHandler(void){
                                 }else{
                                     send_color(CLEAR_HEX);
                                 }
+                            }
                         }
                     }
                 }
