@@ -21,13 +21,16 @@
 #include "misc.h"
 #include "rtcc.h"
 
-#define DATA_LOW_DELAY  200
+#define DATA_LOW_DELAY      300     // delay_us
+#define DIGIT_SPACE_DELAY   2       // delay_ms
 
 void HallEffectSensorHandler(void){
 
-    int i = 0;
-    int j = 0;
-    int k = 0;
+    uint8_t i = 0;
+    uint8_t j = 0;
+    //int k = 0;
+    uint8_t hour_degree = 0;
+    uint8_t minute_degree = 0;
 
     if(GPIOIntStatus(GPIO_PORTB_BASE, false) & GPIO_PIN_0){                     // if PB0 was cause of interrupt
         switch(display_toggle){
@@ -63,7 +66,7 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    delay_ms(DIGIT_SPACE_DELAY);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +83,7 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    delay_ms(DIGIT_SPACE_DELAY);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -97,7 +100,7 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    delay_ms(DIGIT_SPACE_DELAY);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -114,7 +117,7 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    delay_ms(DIGIT_SPACE_DELAY);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -131,7 +134,8 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    //delay_ms(DIGIT_SPACE_DELAY);
+                    // is this one even needed afer the last digit ?
                 }
                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,7 +166,7 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    delay_ms(DIGIT_SPACE_DELAY);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -179,7 +183,7 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    delay_ms(DIGIT_SPACE_DELAY);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -196,7 +200,7 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    delay_ms(DIGIT_SPACE_DELAY);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -213,7 +217,7 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    delay_ms(DIGIT_SPACE_DELAY);
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -230,7 +234,8 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         send_color(CLEAR_HEX);
                     }
-                    delay_ms(2);
+                    //delay_ms(DIGIT_SPACE_DELAY);
+                    // is this one necessary?
                 }
                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,34 +251,30 @@ void HallEffectSensorHandler(void){
                     rotation_count++;                                           // increment rotation count
 
                     // is this delay needed? longer?
-                    delay_ms(2);                                                // allow for small delay
+                    //delay_ms(2);                                                // allow for small delay
 
                     // convert minute to HC_DEGREE value
+                    // develop lookup table - convert to function
+                    // uint8_t MinuteConvert(hour, minute);
+                    // minute_degree = MinuteConvert(hour, minute);     // hour & minute are global may not need to pass value
+                    minute_degree = 75;
+
                     // convert hour to HC_DEGREE value
+                    // develop lookup table - convert to function
+                    // uint8_t HourConvert(hour);                       // hour is global, may not need to be passed as parameter
+                    hour_degree = 65;
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//                    for(j = 0; j < HC_DEGREE; ++j){
-//                        for(i = 0; i < 20; ++i){
-//                            if(LED_HC[j][i]){   // this line will also check against HC degree value accounted for minute and hour
-//                                send_color(led_value);
-//                            }else{
-//                                send_color(CLEAR_HEX);
-//                            }
-//                        }
-//                        delay_us(200);
-//                    }
-
-                    for(j = 0; j < 12; ++j){
-                        for(k = 0; k < HCM_WIDTH; ++k){
-                            for(i = 0; i < 20; ++i){
-                                if(LED_HCM[k][i]){
-                                    send_color(led_value);
-                                }else{
-                                    send_color(CLEAR_HEX);
-                                }
+                    for(j = 0; j < HC_DEGREE_MAX; ++j){
+                        for(i = 0; i < 20; ++i){
+                            if(LED_HC[j][i] || ((j == hour_degree) && (LED_HH[0][i])) || ((j == minute_degree) && (LED_MH[0][i])) ){
+                                send_color(led_value);
+                            }else{
+                                send_color(CLEAR_HEX);
                             }
                         }
+                        delay_us(325);
                     }
                 }
                 break;
