@@ -143,3 +143,27 @@ void send_color(uint32_t color){
         }
     }
 }
+
+//void send_color(uint32_t color){
+//    int count = 0;
+//    int hex = 0;
+//
+//    for(count = 24; count > 0; count--){
+//        hex = color >> count;               // right shifts count times
+//        hex = hex & 1;
+//
+//        if(hex == 1){
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
+//            delay_us(6);                                    // delay 6ms
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
+//            delay_us(6);                                    // delay 6ms
+//        }else{
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
+//            delay_us(3);                                    // delay 3ms
+//            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
+//            delay_us(9);                                    // delay 9ms
+//        }
+//    }
+//}
+
+
