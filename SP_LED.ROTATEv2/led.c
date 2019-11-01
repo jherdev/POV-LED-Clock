@@ -16,7 +16,7 @@
 
 #include "led.h"
 
-uint32_t adjust_brightness(uint32_t color, uint8_t brightness){
+uint32_t AdjustBrightness(uint32_t color, uint8_t brightness){
     uint32_t red = color & 0xFF0000;
     uint32_t blue = color & 0x00FF00;
     uint32_t green = color & 0x0000FF;
@@ -45,7 +45,7 @@ uint32_t adjust_brightness(uint32_t color, uint8_t brightness){
     return(red | blue | green);
 }
 
-void send_color(uint32_t color){
+void SendColor(uint32_t color){
     int count = 0;
     int hex = 0;
 
@@ -154,16 +154,21 @@ void send_color(uint32_t color){
 //
 //        if(hex == 1){
 //            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
-//            delay_us(6);                                    // delay 6ms
+//            delay_us(6);                                    // delay 6us
 //            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
-//            delay_us(6);                                    // delay 6ms
+//            delay_us(6);                                    // delay 6us
 //        }else{
 //            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
-//            delay_us(3);                                    // delay 3ms
+//            delay_us(3);                                    // delay 3us
 //            GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
-//            delay_us(9);                                    // delay 9ms
+//            delay_us(9);                                    // delay 9us
 //        }
 //    }
 //}
 
-
+void LightColumn(uint32_t color){
+    uint8_t i = 0;
+    for(i = 0; i < 20; ++i){
+        SendColor(color);
+    }
+}

@@ -56,15 +56,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[((minute % 10) * 5) + j][i]){            // minute % 10
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     delay_ms(DIGIT_SPACE_DELAY);
 
@@ -73,15 +73,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[((minute / 10) * 5) + j][i]){            // minute / 10
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     delay_ms(DIGIT_SPACE_DELAY);
 
@@ -90,15 +90,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[50 + j][i]){                             // colon
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     delay_ms(DIGIT_SPACE_DELAY);
 
@@ -107,15 +107,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[((hour % 10) * 5) + j][i]){              // hour % 10
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     delay_ms(DIGIT_SPACE_DELAY);
 
@@ -124,15 +124,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[((hour / 10) * 5) + j][i]){              // hour / 10
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     //delay_ms(DIGIT_SPACE_DELAY);
                     // is this one even needed afer the last digit ?
@@ -156,15 +156,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[((minute % 10) * 5) + j][i]){            // minute % 10
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     delay_ms(DIGIT_SPACE_DELAY);
 
@@ -173,15 +173,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[((minute / 10) * 5) + j][i]){            // minute / 10
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     delay_ms(DIGIT_SPACE_DELAY);
 
@@ -190,15 +190,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[50 + j][i]){                            // colon
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     delay_ms(DIGIT_SPACE_DELAY);
 
@@ -207,15 +207,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[((hour % 10) * 5) + j][i]){              // hour % 10
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     delay_ms(DIGIT_SPACE_DELAY);
 
@@ -224,15 +224,15 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < 5; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_MAP[((hour / 10) * 5) + j][i]){              // hour / 10
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(DATA_LOW_DELAY);
                     }
                     for(i = 0; i < 20; ++i){
-                        send_color(CLEAR_HEX);
+                        SendColor(CLEAR_HEX);
                     }
                     //delay_ms(DIGIT_SPACE_DELAY);
                     // is this one necessary?
@@ -269,9 +269,9 @@ void HallEffectSensorHandler(void){
                     for(j = 0; j < HC_DEGREE_MAX; ++j){
                         for(i = 0; i < 20; ++i){
                             if(LED_HC[j][i] || ((j == hour_degree) && (LED_HH[0][i])) || ((j == minute_degree) && (LED_MH[0][i])) ){
-                                send_color(led_value);
+                                SendColor(led_value);
                             }else{
-                                send_color(CLEAR_HEX);
+                                SendColor(CLEAR_HEX);
                             }
                         }
                         delay_us(325);

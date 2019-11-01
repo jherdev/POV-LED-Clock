@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v18.1.4                     
 ******************************************************************************
->> Linked Sun Sep 22 22:46:57 2019
+>> Linked Tue Oct 29 11:35:21 2019
 
 OUTPUT FILE NAME:   <SP_LED.ROTATEv2.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00002a5d
@@ -39,19 +39,19 @@ section   page    origin      length       input sections
                   00000000    0000026c     tm4c123gh6pm_startup_ccs.obj (.intvecs)
 
 .text      0    0000026c    00002a58     
-                  0000026c    000009d8     main.obj (.text)
-                  00000c44    000008c0     interrupts.obj (.text)
-                  00001504    00000770     sseg.obj (.text)
-                  00001c74    000001dc     setup.obj (.text)
-                  00001e50    000001d4     uart_out.obj (.text)
-                  00002024    000001bc     led.obj (.text)
-                  000021e0    0000013c     rtcc.obj (.text)
-                  0000231c    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
-                  0000244e    00000002     --HOLE-- [fill = 0]
-                  00002450    00000110                   : sysctl.obj (.text:SysCtlClockGet)
-                  00002560    000000f4                   : sysctl.obj (.text:SysCtlClockSet)
-                  00002654    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
-                  000026f0    00000090     misc.obj (.text)
+                  0000026c    000009b8     main.obj (.text)
+                  00000c24    000008c0     interrupts.obj (.text)
+                  000014e4    00000770     sseg.obj (.text)
+                  00001c54    000001f0     led.obj (.text)
+                  00001e44    000001dc     setup.obj (.text)
+                  00002020    000001d4     uart_out.obj (.text)
+                  000021f4    0000013c     rtcc.obj (.text)
+                  00002330    00000132     driverlib.lib : gpio.obj (.text:GPIOPadConfigSet)
+                  00002462    00000002     --HOLE-- [fill = 0]
+                  00002464    00000110                   : sysctl.obj (.text:SysCtlClockGet)
+                  00002574    000000f4                   : sysctl.obj (.text:SysCtlClockSet)
+                  00002668    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.asm.obj (.text)
+                  00002704    0000007c     misc.obj (.text)
                   00002780    00000068     driverlib.lib : interrupt.obj (.text:IntEnable)
                   000027e8    00000068     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
                   00002850    00000056     driverlib.lib : gpio.obj (.text:GPIOIntTypeSet)
@@ -142,14 +142,14 @@ MODULE SUMMARY
        ------                         ----    -------   -------
     .\
        interrupts.obj                 2240    3540      0      
-       main.obj                       2520    0         10     
+       main.obj                       2488    0         10     
        sseg.obj                       1904    0         0      
        uart_out.obj                   468     1340      0      
        tm4c123gh6pm_startup_ccs.obj   12      620       0      
+       led.obj                        496     0         0      
        setup.obj                      476     0         0      
-       led.obj                        444     0         0      
        rtcc.obj                       316     0         0      
-       misc.obj                       144     0         0      
+       misc.obj                       124     0         0      
     +--+------------------------------+-------+---------+---------+
        Total:                         8524    5500      10     
                                                                
@@ -201,6 +201,8 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                          
 -------   ----                          
+00001c55  AdjustBrightness              
+00000b8f  ButtonPoll                    
 00002cc1  C$$EXIT                       
 00002c45  CPUcpsid                      
 00002c51  CPUcpsie                      
@@ -211,7 +213,7 @@ address   name
 00002b49  GPIOIntRegister               
 00002c29  GPIOIntStatus                 
 00002851  GPIOIntTypeSet                
-0000231d  GPIOPadConfigSet              
+00002331  GPIOPadConfigSet              
 00002945  GPIOPinConfigure              
 00002c9f  GPIOPinRead                   
 00002ba1  GPIOPinTypeGPIOInput          
@@ -220,7 +222,7 @@ address   name
 00002bc5  GPIOPinTypeI2CSCL             
 00002bd7  GPIOPinTypeUART               
 00002ca5  GPIOPinWrite                  
-00000c45  HallEffectSensorHandler       
+00000c25  HallEffectSensorHandler       
 00002c89  I2CMasterBusy                 
 00002cb1  I2CMasterControl              
 00002cb5  I2CMasterDataGet              
@@ -228,8 +230,8 @@ address   name
 00002c75  I2CMasterEnable               
 000028f9  I2CMasterInitExpClk           
 00002c91  I2CMasterSlaveAddrSet         
-000022c1  I2CReceive                    
-000021e1  I2CSend                       
+000022d5  I2CReceive                    
+000021f5  I2CSend                       
 00002781  IntEnable                     
 00002bfb  IntMasterDisable              
 00002c0b  IntMasterEnable               
@@ -238,9 +240,11 @@ address   name
 000042b0  LED_HH                        
 00003624  LED_MAP                       
 000042c4  LED_MH                        
+00001e0d  LightColumn                   
 00002c69  ResetISR                      
-00002451  SysCtlClockGet                
-00002561  SysCtlClockSet                
+00001d0b  SendColor                     
+00002465  SysCtlClockGet                
+00002575  SysCtlClockSet                
 00002cab  SysCtlDelay                   
 00002ac9  SysCtlPeripheralEnable        
 000028a9  SysCtlPeripheralReset         
@@ -248,10 +252,10 @@ address   name
 0000298d  UARTConfigSetExpClk           
 00002b29  UARTDisable                   
 00002b79  UARTEnable                    
-00001ebf  UART_OutMonth                 
-00001f2f  UART_OutString                
-00001f9f  UART_OutString2               
-00001e51  UART_OutWeekDay               
+0000208f  UART_OutMonth                 
+000020ff  UART_OutString                
+0000216f  UART_OutString2               
+00002021  UART_OutWeekDay               
 20000470  __STACK_END                   
 00000200  __STACK_SIZE                  
 20000470  __STACK_TOP                   
@@ -267,9 +271,9 @@ ffffffff  __TI_prof_data_size
 ffffffff  __TI_prof_data_start          
 00000000  __TI_static_base__            
 00002be9  __TI_zero_init_nomemset       
-00002655  __aeabi_memcpy                
-00002655  __aeabi_memcpy4               
-00002655  __aeabi_memcpy8               
+00002669  __aeabi_memcpy                
+00002669  __aeabi_memcpy4               
+00002669  __aeabi_memcpy8               
 ffffffff  __binit__                     
 ffffffff  __c_args__                    
 UNDEFED   __mpu_init                    
@@ -278,30 +282,26 @@ UNDEFED   __mpu_init
 UNDEFED   _system_post_cinit            
 00002cbd  _system_pre_init              
 00002cc1  abort                         
-00002025  adjust_brightness             
-00002717  bcd_to_dec                    
+0000272b  bcd_to_dec                    
 ffffffff  binit                         
-00000b8f  button_poll                   
-000026f1  dec_to_bcd                    
-00002737  delay_ms                      
-00002751  delay_us                      
+00002705  dec_to_bcd                    
+0000274b  delay_ms                      
+00002765  delay_us                      
 20000471  display_toggle                
 20000000  g_pfnRAMVectors               
 00000000  g_pfnVectors                  
 20000478  hour                          
-00002769  hour_reg_mask                 
 20000474  led_value                     
 0000026d  main                          
-00002655  memcpy                        
+00002669  memcpy                        
 20000479  minute                        
 20000470  rotation_count                
-000020db  send_color                    
-00001c75  setup                         
-00001c0f  sseg_clear                    
-00001615  sseg_decoder                  
-000015e5  sseg_digit_clear              
-00001589  sseg_digit_select             
-00001505  sseg_message                  
+00001e45  setup                         
+00001bef  sseg_clear                    
+000015f5  sseg_decoder                  
+000015c5  sseg_digit_clear              
+00001569  sseg_digit_select             
+000014e5  sseg_message                  
 00002b8d  strlen                        
 
 
@@ -313,34 +313,34 @@ address   name
 00000000  g_pfnVectors                  
 00000200  __STACK_SIZE                  
 0000026d  main                          
-00000b8f  button_poll                   
-00000c45  HallEffectSensorHandler       
-00001505  sseg_message                  
-00001589  sseg_digit_select             
-000015e5  sseg_digit_clear              
-00001615  sseg_decoder                  
-00001c0f  sseg_clear                    
-00001c75  setup                         
-00001e51  UART_OutWeekDay               
-00001ebf  UART_OutMonth                 
-00001f2f  UART_OutString                
-00001f9f  UART_OutString2               
-00002025  adjust_brightness             
-000020db  send_color                    
-000021e1  I2CSend                       
-000022c1  I2CReceive                    
-0000231d  GPIOPadConfigSet              
-00002451  SysCtlClockGet                
-00002561  SysCtlClockSet                
-00002655  __aeabi_memcpy                
-00002655  __aeabi_memcpy4               
-00002655  __aeabi_memcpy8               
-00002655  memcpy                        
-000026f1  dec_to_bcd                    
-00002717  bcd_to_dec                    
-00002737  delay_ms                      
-00002751  delay_us                      
-00002769  hour_reg_mask                 
+00000b8f  ButtonPoll                    
+00000c25  HallEffectSensorHandler       
+000014e5  sseg_message                  
+00001569  sseg_digit_select             
+000015c5  sseg_digit_clear              
+000015f5  sseg_decoder                  
+00001bef  sseg_clear                    
+00001c55  AdjustBrightness              
+00001d0b  SendColor                     
+00001e0d  LightColumn                   
+00001e45  setup                         
+00002021  UART_OutWeekDay               
+0000208f  UART_OutMonth                 
+000020ff  UART_OutString                
+0000216f  UART_OutString2               
+000021f5  I2CSend                       
+000022d5  I2CReceive                    
+00002331  GPIOPadConfigSet              
+00002465  SysCtlClockGet                
+00002575  SysCtlClockSet                
+00002669  __aeabi_memcpy                
+00002669  __aeabi_memcpy4               
+00002669  __aeabi_memcpy8               
+00002669  memcpy                        
+00002705  dec_to_bcd                    
+0000272b  bcd_to_dec                    
+0000274b  delay_ms                      
+00002765  delay_us                      
 00002781  IntEnable                     
 000027e9  __TI_decompress_lzss          
 00002851  GPIOIntTypeSet                

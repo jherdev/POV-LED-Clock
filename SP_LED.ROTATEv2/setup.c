@@ -84,11 +84,8 @@ void setup(void){
     I2CSend(SLAVE_ADDR, 2,  RTCYEAR,    0x19);
     //Initialized RTCC Date set to Wednesday, July 10, 2019 - 0450 Hours
 
-    // check and clear OSF bit (0x0F control register, bit 7)
-
     // check and clear EN32kHz (0x0F control register, bit 3)
     I2CSend(SLAVE_ADDR, 2, STATUS_REG,  0x08);
-
 
     // Rising / Falling Edge Interrupt Setup - Hall Effect Sensor
     GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, GPIO_PIN_0);  // initialize B0 as input

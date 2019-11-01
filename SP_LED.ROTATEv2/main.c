@@ -10,7 +10,7 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/gpio.h"
 #include "driverlib/uart.h"
-#include "driverlib/gpio.h"
+//#include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/i2c.h"
 
@@ -24,7 +24,7 @@
 #include "interrupts.h"
 
 enum button{toggle_b = 1, hour_b, minute_b, clock_b, brightness_b, color_b};
-uint8_t button_poll(void);
+uint8_t ButtonPoll(void);
 volatile uint8_t rotation_count = 0;
 volatile uint8_t display_toggle = 0;
 volatile uint32_t led_value = 0;
@@ -52,7 +52,7 @@ int main(void)
     hour = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCHOUR));                 // retrieve current hour value
     minute = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCMIN));                // retrieve current minute value
 
-    led_value = adjust_brightness(color_toggle, brightness_toggle);     // default color RED, default brightness 100%
+    led_value = AdjustBrightness(color_toggle, brightness_toggle);     // default color RED, default brightness 100%
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -67,7 +67,7 @@ int main(void)
                     UART_OutString(3);      // Display Entered Clock Configuration State
                     UART_OutString(4);      // Display Press Button to Modify Parameter
                     do{
-                        switch(button_poll()){
+                        switch(ButtonPoll()){
                             case toggle_b:
                                 configure_state = TOGGLE;
                                 break;
@@ -96,7 +96,7 @@ int main(void)
                 case TOGGLE:
                     UART_OutString(display_toggle);                     // Display current display toggle mode
                     do{
-                        switch(button_poll()){
+                        switch(ButtonPoll()){
                             case toggle_b:
                                 if(display_toggle == 2){
                                     display_toggle = 0;
@@ -147,7 +147,7 @@ int main(void)
                     UARTCharPut(UART0_BASE, (hour % 10) + 48);
                     UARTCharPut(UART0_BASE, '\r');
                     do{
-                        switch(button_poll()){
+                        switch(ButtonPoll()){
                             case toggle_b:
                                 configure_state = TOGGLE;
                                 UARTCharPut(UART0_BASE, '\n');
@@ -194,7 +194,7 @@ int main(void)
                     UARTCharPut(UART0_BASE, (minute % 10) + 48);
                     UARTCharPut(UART0_BASE, '\r');
                     do{
-                        switch(button_poll()){
+                        switch(ButtonPoll()){
                             case toggle_b:
                                 configure_state = TOGGLE;
                                 UARTCharPut(UART0_BASE, '\n');
@@ -237,7 +237,7 @@ int main(void)
                     break;
                 case CLOCK:
                     do{
-                        switch(button_poll()){
+                        switch(ButtonPoll()){
                             case toggle_b:
                                 configure_state = TOGGLE;
                                 UARTCharPut(UART0_BASE, '\n');
@@ -286,7 +286,7 @@ int main(void)
                 case BRIGHT:
                     UART_OutString2(brightness_toggle);                     // Display current brightness toggle mode
                     do{
-                        switch(button_poll()){
+                        switch(ButtonPoll()){
                             case toggle_b:
                                 configure_state = TOGGLE;
                                 break;
@@ -308,10 +308,10 @@ int main(void)
 
                                 UART_OutString2(brightness_toggle);         // Display current brightness toggle mode
 
-                                led_value = adjust_brightness(color_toggle, brightness_toggle);
+                                led_value = AdjustBrightness(color_toggle, brightness_toggle);
 
                                 for(i = 0; i < 20; i++){
-                                    send_color(led_value);
+                                    SendColor(led_value);
                                 }
                                 break;
                             case color_b:
@@ -343,7 +343,7 @@ int main(void)
                     break;
                 case COLOR:
                     do{
-                        switch(button_poll()){
+                        switch(ButtonPoll()){
                             case toggle_b:
                                 configure_state = TOGGLE;
                                 break;
@@ -362,7 +362,8 @@ int main(void)
                             case color_b:
                                 switch(color_toggle){
                                     case RED_HEX:
-                                        color_toggle = BLUE_HEX;
+                                        //color_toggle = BLUE_HEX;
+                                        color_toggle = WHITE_HEX;
                                         break;
                                     case BLUE_HEX:
                                         color_toggle = GREEN_HEX;
@@ -374,14 +375,15 @@ int main(void)
                                         color_toggle = RED_HEX;
                                         break;
                                     default:
-                                        color_toggle = RED_HEX;
+                                        //color_toggle = RED_HEX;
+                                        color_toggle = CLEAR_HEX;
                                         break;
                                 }
 
-                                led_value = adjust_brightness(color_toggle, brightness_toggle);
+                                led_value = AdjustBrightness(color_toggle, brightness_toggle);
 
                                 for(i = 0; i < 20; i++){
-                                    send_color(led_value);
+                                    SendColor(led_value);
                                 }
                                 break;
                             default:
@@ -407,7 +409,7 @@ int main(void)
             IntMasterEnable();          // Enable interrupts - required for POV ISR
 
             for(i = 0; i < 20; i++){    // clear LED column from configuration values
-                send_color(CLEAR_HEX);
+                SendColor(CLEAR_HEX);
             }
 
         }
@@ -417,30 +419,23 @@ int main(void)
     }
 }
 
-uint8_t button_poll(){
-    uint32_t toggle_input = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_3);
-    uint32_t hour_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_6);
-    uint32_t clock_input = GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_4);
-    uint32_t minute_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_7);
-    uint32_t brightness_input = GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0);
-    uint32_t color_input = GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_2);
-
-    if(toggle_input != 0){
+uint8_t ButtonPoll(){
+    if(GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_3) != 0){
         delay_ms(250);
         return 1;
-    }else if(hour_input != 0){
+    }else if(GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_6) != 0){
         delay_ms(250);
         return 2;
-    }else if(minute_input != 0){
+    }else if(GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_7) != 0){
         delay_ms(250);
         return 3;
-    }else if(clock_input != 0){
+    }else if(GPIOPinRead(GPIO_PORTA_BASE, GPIO_PIN_4) != 0){
         delay_ms(250);
         return 4;
-    }else if(brightness_input != 0){
+    }else if(GPIOPinRead(GPIO_PORTE_BASE, GPIO_PIN_0) != 0){
         delay_ms(250);
         return 5;
-    }else if(color_input != 0){
+    }else if(GPIOPinRead(GPIO_PORTB_BASE, GPIO_PIN_2) != 0){
         delay_ms(250);
         return 6;
     }else{
