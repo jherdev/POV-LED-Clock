@@ -34,7 +34,7 @@ volatile uint8_t minute = 0;
 
 int main(void)
 {
-    int i = 0;
+    //int i = 0;
     uint8_t sw = 0;
     uint8_t reset = 0;
     uint8_t second = 0;
@@ -52,7 +52,7 @@ int main(void)
     hour = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCHOUR));                 // retrieve current hour value
     minute = bcd_to_dec(I2CReceive(SLAVE_ADDR, RTCMIN));                // retrieve current minute value
 
-    led_value = AdjustBrightness(color_toggle, brightness_toggle);     // default color RED, default brightness 100%
+    led_value = AdjustBrightness(color_toggle, brightness_toggle);      // default color RED, default brightness 100%
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -310,9 +310,12 @@ int main(void)
 
                                 led_value = AdjustBrightness(color_toggle, brightness_toggle);
 
-                                for(i = 0; i < 20; i++){
-                                    SendColor(led_value);
-                                }
+                                //for(i = 0; i < 20; i++){
+                                //    SendColor(led_value);
+                                //}
+
+                                LightColumn(led_value);
+
                                 break;
                             case color_b:
                                 configure_state = COLOR;
@@ -362,8 +365,7 @@ int main(void)
                             case color_b:
                                 switch(color_toggle){
                                     case RED_HEX:
-                                        //color_toggle = BLUE_HEX;
-                                        color_toggle = WHITE_HEX;
+                                        color_toggle = BLUE_HEX;
                                         break;
                                     case BLUE_HEX:
                                         color_toggle = GREEN_HEX;
@@ -375,19 +377,22 @@ int main(void)
                                         color_toggle = RED_HEX;
                                         break;
                                     default:
-                                        //color_toggle = RED_HEX;
-                                        color_toggle = CLEAR_HEX;
+                                        color_toggle = RED_HEX;
                                         break;
                                 }
 
                                 led_value = AdjustBrightness(color_toggle, brightness_toggle);
 
-                                for(i = 0; i < 20; i++){
-                                    SendColor(led_value);
-                                }
+                                //for(i = 0; i < 20; i++){
+                                //    SendColor(led_value);
+                                //}
+
+                                LightColumn(led_value);
+
                                 break;
                             default:
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
+                                sseg_message(99, 99, 99, 99);
                                 break;
                         }
                     }while((configure_state == COLOR) && (sw != 0));
@@ -408,9 +413,12 @@ int main(void)
             configure_state = INIT;     // Resets state for next entry to configuration mode
             IntMasterEnable();          // Enable interrupts - required for POV ISR
 
-            for(i = 0; i < 20; i++){    // clear LED column from configuration values
-                SendColor(CLEAR_HEX);
-            }
+            //for(i = 0; i < 20; i++){    // clear LED column from configuration values
+            //    SendColor(CLEAR_HEX);
+            //}
+
+            LightColumn(CLEAR_HEX);     // Clears color from LED column
+
 
         }
 

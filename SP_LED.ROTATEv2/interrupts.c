@@ -134,8 +134,6 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         SendColor(CLEAR_HEX);
                     }
-                    //delay_ms(DIGIT_SPACE_DELAY);
-                    // is this one even needed afer the last digit ?
                 }
                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -234,8 +232,6 @@ void HallEffectSensorHandler(void){
                     for(i = 0; i < 20; ++i){
                         SendColor(CLEAR_HEX);
                     }
-                    //delay_ms(DIGIT_SPACE_DELAY);
-                    // is this one necessary?
                 }
                 break;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
