@@ -28,7 +28,6 @@ void HallEffectSensorHandler(void){
 
     uint8_t i = 0;
     uint8_t j = 0;
-    //int k = 0;
     uint8_t hour_degree = 0;
     uint8_t minute_degree = 0;
 

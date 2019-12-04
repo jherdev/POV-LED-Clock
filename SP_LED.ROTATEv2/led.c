@@ -89,18 +89,18 @@ void SendColor(uint32_t color){
             asm(" nop");
             asm(" nop");
             asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
             GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
             asm(" nop");  //
-            asm(" nop");
+            //asm(" nop");
         }else{
             GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 1);   // set to 1
             asm(" nop");  //
@@ -113,11 +113,10 @@ void SendColor(uint32_t color){
             asm(" nop");
             asm(" nop");
             asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-            asm(" nop");
-
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
+            //asm(" nop");
             GPIOPinWrite(GPIO_PORTD_BASE, GPIO_PIN_0, 0);   // set to 0
             asm(" nop");  //
             asm(" nop");
@@ -139,7 +138,13 @@ void SendColor(uint32_t color){
             asm(" nop");
             asm(" nop");
             asm(" nop");
-
+            asm(" nop");
+            asm(" nop");
+            asm(" nop");
+            asm(" nop");
+            asm(" nop");
+            asm(" nop");
+            asm(" nop");
         }
     }
 }

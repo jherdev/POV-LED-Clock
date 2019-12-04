@@ -10,7 +10,6 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/gpio.h"
 #include "driverlib/uart.h"
-//#include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/i2c.h"
 
@@ -34,7 +33,6 @@ volatile uint8_t minute = 0;
 
 int main(void)
 {
-    //int i = 0;
     uint8_t sw = 0;
     uint8_t reset = 0;
     uint8_t second = 0;
@@ -305,17 +303,9 @@ int main(void)
                                 }else{
                                     brightness_toggle++;
                                 }
-
                                 UART_OutString2(brightness_toggle);         // Display current brightness toggle mode
-
                                 led_value = AdjustBrightness(color_toggle, brightness_toggle);
-
-                                //for(i = 0; i < 20; i++){
-                                //    SendColor(led_value);
-                                //}
-
                                 LightColumn(led_value);
-
                                 break;
                             case color_b:
                                 configure_state = COLOR;
@@ -380,15 +370,8 @@ int main(void)
                                         color_toggle = RED_HEX;
                                         break;
                                 }
-
                                 led_value = AdjustBrightness(color_toggle, brightness_toggle);
-
-                                //for(i = 0; i < 20; i++){
-                                //    SendColor(led_value);
-                                //}
-
                                 LightColumn(led_value);
-
                                 break;
                             default:
                                 sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
@@ -398,10 +381,8 @@ int main(void)
                     }while((configure_state == COLOR) && (sw != 0));
                     break;
                 default:
-
                     sw = GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_3);
                     configure_state = INIT;
-
                     break;
             }
         }
@@ -412,18 +393,9 @@ int main(void)
             UART_OutString(9);          // UART message "Entered POV Mode"
             configure_state = INIT;     // Resets state for next entry to configuration mode
             IntMasterEnable();          // Enable interrupts - required for POV ISR
-
-            //for(i = 0; i < 20; i++){    // clear LED column from configuration values
-            //    SendColor(CLEAR_HEX);
-            //}
-
             LightColumn(CLEAR_HEX);     // Clears color from LED column
-
-
         }
-
         // rising / falling edge interrupt, for hall effect sensor, resets position counter to 0
-
     }
 }
 
