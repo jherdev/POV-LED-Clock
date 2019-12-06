@@ -245,19 +245,114 @@ void HallEffectSensorHandler(void){
                 }else{
                     rotation_count++;                                           // increment rotation count
 
-                    // is this delay needed? longer?
-                    //delay_ms(2);                                                // allow for small delay
+                    if(hour > 12){
+                        hour = hour - 12;                                       // account for storage of data as 24 hour value
+                    }
 
-                    // convert minute to HC_DEGREE value
-                    // develop lookup table - convert to function
-                    // uint8_t MinuteConvert(hour, minute);
-                    // minute_degree = MinuteConvert(hour, minute);     // hour & minute are global may not need to pass value
-                    minute_degree = 75;
+                    switch(hour){
+                        case 0:
+                            hour_degree = 30;
+                            break;
+                        case 1:
+                            hour_degree = 20;
+                            break;
+                        case 2:
+                            hour_degree = 10;
+                            break;
+                        case 3:
+                            hour_degree = 0;
+                            break;
+                        case 4:
+                            hour_degree = 110;
+                            break;
+                        case 5:
+                            hour_degree = 100;
+                            break;
+                        case 6:
+                            hour_degree = 90;
+                            break;
+                        case 7:
+                            hour_degree = 80;
+                            break;
+                        case 8:
+                            hour_degree = 70;
+                            break;
+                        case 9:
+                            hour_degree = 60;
+                            break;
+                        case 10:
+                            hour_degree = 50;
+                            break;
+                        case 11:
+                            hour_degree = 40;
+                            break;
+                    }
 
-                    // convert hour to HC_DEGREE value
-                    // develop lookup table - convert to function
-                    // uint8_t HourConvert(hour);                       // hour is global, may not need to be passed as parameter
-                    hour_degree = 65;
+                    if(minute < 5){
+                        minute = 0;
+                    }else if(minute < 10){
+                        minute = 5;
+                    }else if(minute < 15){
+                        minute = 10;
+                    }else if(minute < 20){
+                        minute = 15;
+                    }else if(minute < 25){
+                        minute = 20;
+                    }else if(minute < 30){
+                        minute = 25;
+                    }else if(minute < 35){
+                        minute = 30;
+                    }else if(minute < 40){
+                        minute = 35;
+                    }else if(minute < 45){
+                        minute = 40;
+                    }else if(minute < 50){
+                        minute = 45;
+                    }else if(minute < 55){
+                        minute = 50;
+                    }else{ //if(minute < 60){
+                        minute = 55;
+                    }
+
+                    switch(minute){
+                        case 0:
+                            minute_degree = 30;
+                            break;
+                        case 5:
+                            minute_degree = 20;
+                            break;
+                        case 10:
+                            minute_degree = 10;
+                            break;
+                        case 15:
+                            minute_degree = 0;
+                            break;
+                        case 20:
+                            minute_degree = 110;
+                            break;
+                        case 25:
+                            minute_degree = 100;
+                            break;
+                        case 30:
+                            minute_degree = 90;
+                            break;
+                        case 35:
+                            minute_degree = 80;
+                            break;
+                        case 40:
+                            minute_degree = 70;
+                            break;
+                        case 45:
+                            minute_degree = 60;
+                            break;
+                        case 50:
+                            minute_degree = 50;
+                            break;
+                        case 55:
+                            minute_degree = 40;
+                            break;
+
+                    }
 
                     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -269,7 +364,7 @@ void HallEffectSensorHandler(void){
                                 SendColor(CLEAR_HEX);
                             }
                         }
-                        delay_us(325);
+                        delay_us(310);
                     }
                 }
                 break;
